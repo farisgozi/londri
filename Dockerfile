@@ -1,18 +1,10 @@
 FROM php:8.2-apache
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
-    libpng-dev \
-    libjpeg-dev \
-    libfreetype6-dev \
-    zip \
-    unzip \
-    curl \
-    && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install gd pdo pdo_mysql mysqli
+# Install PHP extensions
+RUN docker-php-ext-install mysqli pdo pdo_mysql
 
 # Enable Apache modules
-RUN a2enmod rewrite headers
+RUN a2enmod rewrite
 
 # Set working directory
 WORKDIR /var/www/html
@@ -20,38 +12,18 @@ WORKDIR /var/www/html
 # Copy application files
 COPY . /var/www/html/
 
-# Copy Apache configurations
-COPY 000-default.conf /etc/apache2/sites-available/000-default.conf
-COPY ports.conf /etc/apache2/ports.conf.template
-COPY mpm_prefork.conf /etc/apache2/mods-available/mpm_prefork.conf
-
 # Set permissions
 RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 755 /var/www/html
 
-# Configure Apache
-RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
-
 # Configure PHP
-RUN echo "memory_limit=512M" > /usr/local/etc/php/conf.d/memory-limit.ini \
-    && echo "max_execution_time=300" >> /usr/local/etc/php/conf.d/memory-limit.ini \
-    && echo "upload_max_filesize=64M" >> /usr/local/etc/php/conf.d/memory-limit.ini \
-    && echo "post_max_size=64M" >> /usr/local/etc/php/conf.d/memory-limit.ini
+RUN echo "memory_limit=512M" > /usr/local/etc/php/conf.d/memory-limit.ini
 
 # Create entrypoint script
-RUN echo '#!/bin/bash\n\
-PORT="${PORT:-80}"\n\
-sed -i "s/Listen 80/Listen ${PORT}/g" /etc/apache2/ports.conf.template\n\
-cp /etc/apache2/ports.conf.template /etc/apache2/ports.conf\n\
-apache2-foreground' > /usr/local/bin/docker-entrypoint.sh \
-    && chmod +x /usr/local/bin/docker-entrypoint.sh
+RUN echo '#!/bin/sh\n\
+sed -i "s/80/$PORT/g" /etc/apache2/sites-available/000-default.conf /etc/apache2/ports.conf\n\
+docker-php-entrypoint apache2-foreground' > /usr/local/bin/start.sh \
+    && chmod +x /usr/local/bin/start.sh
 
-# Expose default port
-EXPOSE 80
-
-# Health check
-HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 \
-    CMD curl -f http://localhost:${PORT:-80}/login.php || exit 1
-
-# Start Apache using the entrypoint script
-ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
+# Start Apache
+CMD ["/usr/local/bin/start.sh"]
