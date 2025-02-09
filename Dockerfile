@@ -12,7 +12,7 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-install gd pdo pdo_mysql mysqli
 
 # Enable Apache modules
-RUN a2enmod rewrite headers
+RUN a2enmod rewrite headers proxy proxy_fcgi
 
 # Set working directory
 WORKDIR /var/www/html
@@ -39,7 +39,9 @@ RUN echo "memory_limit=512M" > /usr/local/etc/php/conf.d/memory-limit.ini \
 
 # Create entrypoint script
 RUN echo '#!/bin/bash\n\
-PORT="${PORT:-80}"\n\
+export PORT="${PORT:-80}"\n\
+export APACHE_RUN_USER=www-data\n\
+export APACHE_RUN_GROUP=www-data\n\
 cp /etc/apache2/ports.conf.template /etc/apache2/ports.conf\n\
 sed -i "s/Listen 80/Listen ${PORT}/g" /etc/apache2/ports.conf\n\
 sed -i "s/*:80/*:${PORT}/g" /etc/apache2/sites-available/000-default.conf\n\
