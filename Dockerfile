@@ -38,12 +38,11 @@ RUN echo "memory_limit=512M" > /usr/local/etc/php/conf.d/memory-limit.ini \
     && echo "upload_max_filesize=64M" >> /usr/local/etc/php/conf.d/memory-limit.ini \
     && echo "post_max_size=64M" >> /usr/local/etc/php/conf.d/memory-limit.ini
 
-# Create simple entrypoint script
+# Create entrypoint script
 RUN echo '#!/bin/bash\n\
-export PORT="${PORT:-80}"\n\
+PORT="${PORT:-80}"\n\
+sed -i "s/Listen 80/Listen ${PORT}/g" /etc/apache2/ports.conf.template\n\
 cp /etc/apache2/ports.conf.template /etc/apache2/ports.conf\n\
-sed -i "s/Listen 80/Listen ${PORT}/g" /etc/apache2/ports.conf\n\
-sed -i "s/*:80/*:${PORT}/g" /etc/apache2/sites-available/000-default.conf\n\
 apache2-foreground' > /usr/local/bin/docker-entrypoint.sh \
     && chmod +x /usr/local/bin/docker-entrypoint.sh
 
