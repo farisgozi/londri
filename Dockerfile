@@ -7,6 +7,7 @@ RUN apt-get update && apt-get install -y \
     libfreetype6-dev \
     zip \
     unzip \
+    curl \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install gd pdo pdo_mysql mysqli
 
@@ -35,18 +36,18 @@ RUN echo "memory_limit=512M" > /usr/local/etc/php/conf.d/memory-limit.ini \
     && echo "upload_max_filesize=64M" >> /usr/local/etc/php/conf.d/memory-limit.ini \
     && echo "post_max_size=64M" >> /usr/local/etc/php/conf.d/memory-limit.ini
 
-# Create health check script
+# Create a script to update Apache configuration
 RUN echo '#!/bin/bash\n\
-curl -f http://localhost:$PORT/login.php || exit 1' > /usr/local/bin/health-check.sh \
-    && chmod +x /usr/local/bin/health-check.sh
+echo "Listen \${PORT:-80}" > /etc/apache2/ports.conf\n\
+apache2-foreground' > /usr/local/bin/docker-entrypoint.sh \
+    && chmod +x /usr/local/bin/docker-entrypoint.sh
 
-# Expose port
-ENV PORT=80
+# Expose default port
 EXPOSE 80
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 \
-    CMD /usr/local/bin/health-check.sh
+    CMD curl -f http://localhost:${PORT:-80}/login.php || exit 1
 
-# Start Apache
-CMD sed -i "s/80/$PORT/g" /etc/apache2/sites-available/000-default.conf /etc/apache2/ports.conf && apache2-foreground
+# Start Apache using the entrypoint script
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
