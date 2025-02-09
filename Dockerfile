@@ -28,14 +28,11 @@ RUN chown -R apache:apache /var/www/html \
 RUN mkdir -p /etc/php82/conf.d \
     && echo "memory_limit=512M" > /etc/php82/conf.d/memory-limit.ini
 
-# Create entrypoint script
-RUN echo '#!/bin/sh\n\
-sed -i "s/\${PORT}/'"$PORT"'/g" /usr/local/apache2/conf/httpd.conf\n\
-httpd-foreground' > /usr/local/bin/docker-entrypoint.sh \
-    && chmod +x /usr/local/bin/docker-entrypoint.sh
+# Configure Apache for dynamic port
+RUN sed -i 's/Listen 80/Listen ${PORT}/g' /usr/local/apache2/conf/httpd.conf
 
 # Expose port
 EXPOSE 80
 
-# Start Apache
-CMD ["/usr/local/bin/docker-entrypoint.sh"]
+# Use httpd's default entrypoint and cmd
+CMD ["httpd-foreground"]

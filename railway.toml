@@ -4,3 +4,4 @@ dockerfilePath = "Dockerfile"
 
 [deploy]
 numReplicas = 1
+startCommand = "PORT=${PORT} httpd-foreground"
