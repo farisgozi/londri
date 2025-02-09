@@ -1,5 +1,10 @@
 FROM php:8.2-apache
 
+# Install system dependencies and supervisor
+RUN apt-get update && apt-get install -y \
+    supervisor \
+    && rm -rf /var/lib/apt/lists/*
+
 # Install PHP extensions
 RUN docker-php-ext-install mysqli pdo pdo_mysql
 
@@ -19,14 +24,19 @@ RUN chown -R www-data:www-data /var/www/html \
 # Configure PHP
 RUN echo "memory_limit=512M" > /usr/local/etc/php/conf.d/memory-limit.ini
 
-# Set ServerName to suppress Apache warning
-RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
+# Copy and setup Apache and supervisor configs
+COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+COPY 000-default.conf /etc/apache2/sites-available/000-default.conf
 
-# Create entrypoint script
-RUN echo '#!/bin/sh\n\
-sed -i "s/80/$PORT/g" /etc/apache2/sites-available/000-default.conf /etc/apache2/ports.conf\n\
-docker-php-entrypoint apache2-foreground' > /usr/local/bin/start.sh \
-    && chmod +x /usr/local/bin/start.sh
+# Copy and setup startup script
+COPY start-apache.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/start-apache.sh
 
-# Start Apache
-CMD ["/usr/local/bin/start.sh"]
+# Create required supervisor directory
+RUN mkdir -p /var/log/supervisor
+
+# Expose port
+EXPOSE 80
+
+# Start Apache with supervisor
+CMD ["/usr/local/bin/start-apache.sh"]
