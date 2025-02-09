@@ -20,8 +20,9 @@ WORKDIR /var/www/html
 # Copy application files
 COPY . /var/www/html/
 
-# Copy Apache configuration
+# Copy Apache configurations
 COPY 000-default.conf /etc/apache2/sites-available/000-default.conf
+COPY ports.conf /etc/apache2/ports.conf.template
 
 # Set permissions
 RUN chown -R www-data:www-data /var/www/html \
@@ -36,10 +37,13 @@ RUN echo "memory_limit=512M" > /usr/local/etc/php/conf.d/memory-limit.ini \
     && echo "upload_max_filesize=64M" >> /usr/local/etc/php/conf.d/memory-limit.ini \
     && echo "post_max_size=64M" >> /usr/local/etc/php/conf.d/memory-limit.ini
 
-# Create a script to update Apache configuration
+# Create entrypoint script
 RUN echo '#!/bin/bash\n\
-echo "Listen \${PORT:-80}" > /etc/apache2/ports.conf\n\
-apache2-foreground' > /usr/local/bin/docker-entrypoint.sh \
+PORT="${PORT:-80}"\n\
+cp /etc/apache2/ports.conf.template /etc/apache2/ports.conf\n\
+sed -i "s/Listen 80/Listen ${PORT}/g" /etc/apache2/ports.conf\n\
+sed -i "s/*:80/*:${PORT}/g" /etc/apache2/sites-available/000-default.conf\n\
+exec apache2-foreground' > /usr/local/bin/docker-entrypoint.sh \
     && chmod +x /usr/local/bin/docker-entrypoint.sh
 
 # Expose default port
