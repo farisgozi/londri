@@ -28,11 +28,12 @@ RUN chown -R apache:apache /var/www/html \
 RUN mkdir -p /etc/php82/conf.d \
     && echo "memory_limit=512M" > /etc/php82/conf.d/memory-limit.ini
 
-# Configure Apache for dynamic port
-RUN sed -i 's/Listen 80/Listen ${PORT}/g' /usr/local/apache2/conf/httpd.conf
+# Copy and setup start script
+COPY start.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/start.sh
 
 # Expose port
 EXPOSE 80
 
-# Use httpd's default entrypoint and cmd
-CMD ["httpd-foreground"]
+# Use our start script
+CMD ["/usr/local/bin/start.sh"]
