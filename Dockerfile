@@ -24,22 +24,13 @@ RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
 
 # Copy Apache configs
 COPY 000-default.conf /etc/apache2/sites-available/000-default.conf
-COPY ports.conf /etc/apache2/ports.conf.template
 
-# Create entrypoint script
-RUN echo '#!/bin/bash\n\
-export PORT="${PORT:-80}"\n\
-envsubst "\${PORT}" < /etc/apache2/ports.conf.template > /etc/apache2/ports.conf\n\
-envsubst "\${PORT}" < /etc/apache2/sites-available/000-default.conf > /etc/apache2/sites-available/000-default.conf.tmp\n\
-mv /etc/apache2/sites-available/000-default.conf.tmp /etc/apache2/sites-available/000-default.conf\n\
-exec apache2-foreground "$@"' > /usr/local/bin/docker-apache-entrypoint \
-    && chmod +x /usr/local/bin/docker-apache-entrypoint
-
-# Install envsubst
-RUN apt-get update && apt-get install -y gettext-base && rm -rf /var/lib/apt/lists/*
+# Copy and set up entrypoint script
+COPY docker-entrypoint.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
 # Expose port
 EXPOSE 80
 
-# Use custom entrypoint
-ENTRYPOINT ["/usr/local/bin/docker-apache-entrypoint"]
+# Set entrypoint
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
