@@ -19,6 +19,9 @@ RUN chown -R www-data:www-data /var/www/html \
 # Configure PHP
 RUN echo "memory_limit=512M" > /usr/local/etc/php/conf.d/memory-limit.ini
 
+# Set ServerName to suppress Apache warning
+RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
+
 # Create entrypoint script
 RUN echo '#!/bin/sh\n\
 sed -i "s/80/$PORT/g" /etc/apache2/sites-available/000-default.conf /etc/apache2/ports.conf\n\
