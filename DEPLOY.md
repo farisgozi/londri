@@ -10,7 +10,13 @@
 - Database schema has been imported
 - Connection details are configured
 
-## Step 2: Deploy via Railway Web Interface
+## Step 2: Application Configuration (Done)
+- Dockerfile created with PHP 8.2 and Apache
+- Apache configuration set up
+- Environment variables configured
+- Database connection settings updated
+
+## Step 3: Deploy via Railway Web Interface
 
 1. Go to Railway Dashboard
    - Visit https://railway.app/dashboard
@@ -22,7 +28,7 @@
    - Connect your GitHub repository
    - Select the repository with LaundryApp code
 
-3. Configure Environment Variables
+3. Environment Variables
    The following variables are already set:
    ```
    DB_HOST=junction.proxy.rlwy.net
@@ -32,18 +38,19 @@
    DB_PORT=29252
    ```
 
-4. Deploy Settings
-   The following files are already configured:
-   - `Procfile`: Specifies how to run the PHP server
-   - `railway.toml`: Contains deployment configuration
-   - `composer.json`: Defines PHP dependencies
+4. Deployment Settings
+   The following files are configured:
+   - `Dockerfile`: PHP 8.2 with Apache setup
+   - `000-default.conf`: Apache configuration
+   - `railway.toml`: Railway deployment settings
 
-## Step 3: Verify Deployment
+## Step 4: Verify Deployment
 
 1. Check Build Logs
    - Go to your service in Railway dashboard
    - Click on "Deployments" tab
-   - Check build and deployment logs
+   - Monitor Docker build process
+   - Check for any build errors
 
 2. Access Your Application
    - Click on "Settings" tab
@@ -57,15 +64,17 @@
    - Check if MySQL service is running
    - Test connection using provided credentials
 
-2. Application Errors
-   - Check deployment logs in Railway dashboard
-   - Verify PHP version compatibility
-   - Check file permissions
+2. Docker Build Issues
+   - Check Dockerfile syntax
+   - Verify PHP extensions are installed
+   - Check Apache configuration
+   - Monitor build logs in Railway dashboard
 
-3. Domain Issues
-   - Ensure domain is generated in Railway
-   - Wait a few minutes for DNS propagation
-   - Check if SSL certificate is provisioned
+3. Application Errors
+   - Check application logs in Railway dashboard
+   - Verify file permissions
+   - Check PHP configuration
+   - Monitor Apache error logs
 
 ## Important Notes
 
@@ -78,7 +87,8 @@
 
 1. Updating Application
    - Push changes to GitHub
-   - Railway will automatically redeploy
+   - Railway will automatically rebuild Docker image
+   - Monitor deployment progress
 
 2. Database Management
    - Use Railway dashboard to manage database
@@ -86,6 +96,7 @@
    - Monitor database metrics
 
 3. Monitoring
-   - Check application logs in Railway dashboard
+   - Check Docker container logs
    - Monitor database connections
    - Watch for error notifications
+   - Check Apache access and error logs
