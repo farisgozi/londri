@@ -305,7 +305,7 @@ License: For each use you must have a valid license purchased only from above li
 										
 											<?php 
 											include "koneksi.php";
-											$sql = 'select * from transaksi join detail_transaksi on detail_transaksi.id_transaksi=transaksi.id_transaksi where transaksi.id_transaksi = '  .$_GET['id_transaksi'];
+$sql = 'select * from transaksi join detail_transaksi on detail_transaksi.id_transaksi=transaksi.id_transaksi where detail_transaksi.id_detail_transaksi = '  .$_GET['id_detail_transaksi'];
                                             $result = mysqli_query($conn, $sql);
                                             $data = mysqli_fetch_assoc($result);
                                         ?>
@@ -341,10 +341,11 @@ License: For each use you must have a valid license purchased only from above li
                                        
                                        
                                         <br><br>
+                                        <input type="hidden" name="id_transaksi" value="<?= $data['id_transaksi']?>">
                                         <div class="form-group row">
                                             <div class="col-lg-8 ml-auto">
                                                 <button type="submit" class="btn btn-primary">Submit</button>
-										<a href="./kasir/transaksi.php"><button type="button" class="btn btn-secondary">Kembali</button></a>
+										<a href="./kasir/detail_transaksi.php"><button type="button" class="btn btn-secondary">Kembali</button></a>
 									</form>
 													
                                                     

@@ -390,6 +390,7 @@ License: For each use you must have a valid license purchased only from above li
                                        
                                        
                                         <br><br>
+                                        <input type="hidden" name="id_transaksi" value="<?= $data['id_transaksi']?>">
                                         <div class="form-group row">
                                             <div class="col-lg-8 ml-auto">
                                                 <button type="submit" class="btn btn-primary">Submit</button>

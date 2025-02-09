@@ -8,16 +8,16 @@ if($_POST){
 
 if(empty($id_member)){
     echo "<script>alert('Id member tidak boleh kosong');location.href='member.php';</script>";
-    } elseif(empty($nama)){
+    } elseif(empty($nama_member)){
     echo "<script>alert('nama member tidak boleh kosong');location.href='member.php';</script>";
     } elseif(empty($tlp)){
     echo "<script>alert('No Telp tidak boleh kosong');location.href='member.php';</script>";
     } else {
     include "koneksi.php";
     $insert=mysqli_query($conn,"insert into member
-    (id_member, nama, alamat, jenis_kelamin, tlp) 
+    (id_member, nama_member, alamat, jenis_kelamin, tlp) 
     value
-    ('".$id_member."','".$nama."','".$alamat."','".$jenis_kelamin."','".$tlp."')") or
+    ('".$id_member."','".$nama_member."','".$alamat."','".$jenis_kelamin."','".$tlp."')") or
     die(mysqli_error($conn));
 if($insert){
     echo "<script>alert('Sukses menambahkan member');location.href='member.php';</script>";
