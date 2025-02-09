@@ -20,17 +20,20 @@ RUN chown -R www-data:www-data /var/www/html \
 RUN echo "memory_limit=512M" > /usr/local/etc/php/conf.d/memory-limit.ini
 
 # Configure Apache
-RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
+RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf \
+    && echo "Listen 80" > /etc/apache2/ports.conf
 
-# Copy Apache configs
+# Copy Apache config
 COPY 000-default.conf /etc/apache2/sites-available/000-default.conf
 
-# Copy and set up entrypoint script
-COPY docker-entrypoint.sh /usr/local/bin/
-RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+# Create simple entrypoint
+RUN echo '#!/bin/sh\n\
+sed -i "s/80/$PORT/g" /etc/apache2/ports.conf\n\
+apache2-foreground' > /usr/local/bin/entrypoint.sh \
+    && chmod +x /usr/local/bin/entrypoint.sh
 
 # Expose port
 EXPOSE 80
 
-# Set entrypoint
-ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
+# Start Apache
+CMD ["/usr/local/bin/entrypoint.sh"]
