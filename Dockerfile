@@ -12,7 +12,7 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-install gd pdo pdo_mysql mysqli
 
 # Enable Apache modules
-RUN a2enmod rewrite headers proxy proxy_fcgi
+RUN a2enmod rewrite headers
 
 # Set working directory
 WORKDIR /var/www/html
@@ -23,6 +23,7 @@ COPY . /var/www/html/
 # Copy Apache configurations
 COPY 000-default.conf /etc/apache2/sites-available/000-default.conf
 COPY ports.conf /etc/apache2/ports.conf.template
+COPY mpm_prefork.conf /etc/apache2/mods-available/mpm_prefork.conf
 
 # Set permissions
 RUN chown -R www-data:www-data /var/www/html \
@@ -37,15 +38,14 @@ RUN echo "memory_limit=512M" > /usr/local/etc/php/conf.d/memory-limit.ini \
     && echo "upload_max_filesize=64M" >> /usr/local/etc/php/conf.d/memory-limit.ini \
     && echo "post_max_size=64M" >> /usr/local/etc/php/conf.d/memory-limit.ini
 
-# Copy and set up init script
-COPY docker-init.sh /usr/local/bin/
-RUN chmod +x /usr/local/bin/docker-init.sh
-
-# Configure Apache MPM
-RUN echo "ServerLimit 1" >> /etc/apache2/apache2.conf \
-    && echo "StartServers 1" >> /etc/apache2/apache2.conf \
-    && echo "MinSpareServers 1" >> /etc/apache2/apache2.conf \
-    && echo "MaxSpareServers 1" >> /etc/apache2/apache2.conf
+# Create simple entrypoint script
+RUN echo '#!/bin/bash\n\
+export PORT="${PORT:-80}"\n\
+cp /etc/apache2/ports.conf.template /etc/apache2/ports.conf\n\
+sed -i "s/Listen 80/Listen ${PORT}/g" /etc/apache2/ports.conf\n\
+sed -i "s/*:80/*:${PORT}/g" /etc/apache2/sites-available/000-default.conf\n\
+apache2-foreground' > /usr/local/bin/docker-entrypoint.sh \
+    && chmod +x /usr/local/bin/docker-entrypoint.sh
 
 # Expose default port
 EXPOSE 80
@@ -54,5 +54,5 @@ EXPOSE 80
 HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 \
     CMD curl -f http://localhost:${PORT:-80}/login.php || exit 1
 
-# Start Apache using the init script
-ENTRYPOINT ["/usr/local/bin/docker-init.sh"]
+# Start Apache using the entrypoint script
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
