@@ -1,10 +1,5 @@
 FROM php:8.2-apache
 
-# Install system dependencies and supervisor
-RUN apt-get update && apt-get install -y \
-    supervisor \
-    && rm -rf /var/lib/apt/lists/*
-
 # Install PHP extensions
 RUN docker-php-ext-install mysqli pdo pdo_mysql
 
@@ -24,19 +19,27 @@ RUN chown -R www-data:www-data /var/www/html \
 # Configure PHP
 RUN echo "memory_limit=512M" > /usr/local/etc/php/conf.d/memory-limit.ini
 
-# Copy and setup Apache and supervisor configs
-COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+# Configure Apache
+RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
+
+# Copy Apache configs
 COPY 000-default.conf /etc/apache2/sites-available/000-default.conf
+COPY ports.conf /etc/apache2/ports.conf.template
 
-# Copy and setup startup script
-COPY start-apache.sh /usr/local/bin/
-RUN chmod +x /usr/local/bin/start-apache.sh
+# Create entrypoint script
+RUN echo '#!/bin/bash\n\
+export PORT="${PORT:-80}"\n\
+envsubst "\${PORT}" < /etc/apache2/ports.conf.template > /etc/apache2/ports.conf\n\
+envsubst "\${PORT}" < /etc/apache2/sites-available/000-default.conf > /etc/apache2/sites-available/000-default.conf.tmp\n\
+mv /etc/apache2/sites-available/000-default.conf.tmp /etc/apache2/sites-available/000-default.conf\n\
+exec apache2-foreground "$@"' > /usr/local/bin/docker-apache-entrypoint \
+    && chmod +x /usr/local/bin/docker-apache-entrypoint
 
-# Create required supervisor directory
-RUN mkdir -p /var/log/supervisor
+# Install envsubst
+RUN apt-get update && apt-get install -y gettext-base && rm -rf /var/lib/apt/lists/*
 
 # Expose port
 EXPOSE 80
 
-# Start Apache with supervisor
-CMD ["/usr/local/bin/start-apache.sh"]
+# Use custom entrypoint
+ENTRYPOINT ["/usr/local/bin/docker-apache-entrypoint"]
