@@ -15,6 +15,9 @@ if($_POST){
     
     $status = isset($_POST['status']) ? $_POST['status'] : 'baru';
     $dibayar = isset($_POST['dibayar']) ? $_POST['dibayar'] : 'belum dibayar';
+    
+    // Set tgl_bayar based on payment status
+    $tgl_bayar = ($dibayar == 'dibayar') ? date('Y-m-d') : '';
 
     if(empty($id_member)){
         echo "<script>alert('Id member tidak boleh kosong');location.href='transaksi.php';</script>";
@@ -25,83 +28,31 @@ if($_POST){
     } elseif(empty($id_paket)){
         echo "<script>alert('Id paket tidak boleh kosong');location.href='transaksi.php';</script>";
     } else {
-        try {
-            // Start transaction
-            mysqli_begin_transaction($conn);
+        // Insert into transaksi table
+        $insert = mysqli_query($conn, 
+            "INSERT INTO transaksi (id_outlet, id_member, tgl, batas_waktu, tgl_bayar, status, dibayar, id_user, id_paket) 
+             VALUES ('$id_outlet', '$id_member', '$tgl', '$batas_waktu', " . 
+             ($dibayar == 'dibayar' ? "'$tgl_bayar'" : "NULL") . 
+             ", '$status', '$dibayar', '$id_user', '$id_paket')"
+        );
+        
+        if($insert){
+            $id_transaksi = mysqli_insert_id($conn);
             
-            // Build query based on payment status
-            if($dibayar == 'dibayar') {
-                $query = "INSERT INTO transaksi (id_outlet, id_member, tgl, batas_waktu, tgl_bayar, status, dibayar, id_user, id_paket) 
-                         VALUES (?, ?, ?, ?, CURRENT_DATE(), ?, ?, ?, ?)";
-                $stmt = mysqli_prepare($conn, $query);
-                mysqli_stmt_bind_param($stmt, "iissssis", 
-                    $id_outlet,
-                    $id_member,
-                    $tgl,
-                    $batas_waktu,
-                    $status,
-                    $dibayar,
-                    $id_user,
-                    $id_paket
-                );
+            // Insert into detail_transaksi table
+            $insert_detail = mysqli_query($conn, 
+                "INSERT INTO detail_transaksi (id_transaksi, id_paket, qty, keterangan) 
+                 VALUES ('$id_transaksi', '$id_paket', '$qty', '$keterangan')"
+            );
+            
+            if($insert_detail){
+                echo "<script>alert('Sukses menambahkan transaksi');location.href='transaksi.php';</script>";
             } else {
-                $query = "INSERT INTO transaksi (id_outlet, id_member, tgl, batas_waktu, tgl_bayar, status, dibayar, id_user, id_paket) 
-                         VALUES (?, ?, ?, ?, NULL, ?, ?, ?, ?)";
-                $stmt = mysqli_prepare($conn, $query);
-                mysqli_stmt_bind_param($stmt, "iissssis", 
-                    $id_outlet,
-                    $id_member,
-                    $tgl,
-                    $batas_waktu,
-                    $status,
-                    $dibayar,
-                    $id_user,
-                    $id_paket
-                );
+                mysqli_query($conn, "DELETE FROM transaksi WHERE id_transaksi = '$id_transaksi'");
+                echo "<script>alert('Gagal menambahkan detail transaksi');location.href='transaksi.php';</script>";
             }
-            
-            if ($stmt === false) {
-                throw new Exception('Failed to prepare statement: ' . mysqli_error($conn));
-            }
-            
-            $insert = mysqli_stmt_execute($stmt);
-            
-            if($insert){
-                $id_transaksi = mysqli_insert_id($conn);
-                
-                // Insert into detail_transaksi table
-                $detail_query = "INSERT INTO detail_transaksi (id_transaksi, id_paket, qty, keterangan) VALUES (?, ?, ?, ?)";
-                $detail_stmt = mysqli_prepare($conn, $detail_query);
-                
-                if ($detail_stmt === false) {
-                    throw new Exception('Failed to prepare detail statement: ' . mysqli_error($conn));
-                }
-                
-                mysqli_stmt_bind_param($detail_stmt, "iiis", 
-                    $id_transaksi, 
-                    $id_paket, 
-                    $qty, 
-                    $keterangan
-                );
-                
-                $insert_detail = mysqli_stmt_execute($detail_stmt);
-                
-                if($insert_detail){
-                    mysqli_commit($conn);
-                    echo "<script>alert('Sukses menambahkan transaksi');location.href='transaksi.php';</script>";
-                } else {
-                    throw new Exception('Failed to insert detail: ' . mysqli_error($conn));
-                }
-                mysqli_stmt_close($detail_stmt);
-            } else {
-                throw new Exception('Failed to insert transaction: ' . mysqli_error($conn));
-            }
-            mysqli_stmt_close($stmt);
-            
-        } catch (Exception $e) {
-            mysqli_rollback($conn);
-            error_log("Error in transaction: " . $e->getMessage());
-            echo "<script>alert('Error: " . addslashes($e->getMessage()) . "');location.href='transaksi.php';</script>";
+        } else {
+            echo "<script>alert('Gagal menambahkan transaksi');location.href='transaksi.php';</script>";
         }
     }
 }
