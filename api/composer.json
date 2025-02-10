@@ -1,0 +1,22 @@
+{
+    "name": "laundry-app/api",
+    "description": "LaundryApp API",
+    "type": "project",
+    "require": {
+        "php": "^8.0",
+        "ext-mysqli": "*",
+        "ext-json": "*"
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "scripts": {
+        "post-install-cmd": [
+            "chmod -R 755 ."
+        ]
+    }
+}

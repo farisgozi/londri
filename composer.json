@@ -1,7 +1,0 @@
-{
-    "name": "laundryapp",
-    "description": "Aplikasi Laundry",
-    "require": {
-        "php": "^8.0"
-    }
-}
