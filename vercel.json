@@ -1,19 +1,19 @@
 {
   "version": 2,
+  "functions": {
+    "api/*.php": {
+      "runtime": "vercel-php@0.6.0"
+    },
+    "api/**/*.php": {
+      "runtime": "vercel-php@0.6.0"
+    }
+  },
   "routes": [
     { "src": "/assets/(.*)", "dest": "/api/assets/$1" },
     { "src": "/css/(.*)", "dest": "/api/css/$1" },
     { "src": "/js/(.*)", "dest": "/api/js/$1" },
     { "src": "/(.*)\\.php", "dest": "/api/$1.php" },
     { "src": "/(.*)", "dest": "/api/index.php" }
-  ],
-  "builds": [
-    { "src": "api/**/*.php", "use": "@vercel/php" },
-    { "src": "api/assets/plugins/custom/datatables/datatables.bundle.js", "use": "@vercel/static" },
-    { "src": "api/assets/plugins/custom/datatables/datatables.bundle.css", "use": "@vercel/static" },
-    { "src": "api/assets/**/*", "use": "@vercel/static" },
-    { "src": "api/css/**/*", "use": "@vercel/static" },
-    { "src": "api/js/**/*", "use": "@vercel/static" }
   ],
   "env": {
     "APP_ENV": "production",

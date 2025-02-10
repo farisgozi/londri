@@ -18,8 +18,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit();
 }
 
-// Set content type
-header('Content-Type: application/json');
+// Set content type based on request
+$contentType = isset($_SERVER['CONTENT_TYPE']) ? $_SERVER['CONTENT_TYPE'] : '';
+if (strpos($contentType, 'application/json') !== false) {
+    header('Content-Type: application/json');
+} else {
+    header('Content-Type: text/html; charset=utf-8');
+}
 
 // Load database configuration
 require_once __DIR__ . '/config/database.php';
@@ -46,4 +51,14 @@ function handleError($message) {
         'error' => true,
         'message' => $message
     ];
+}
+
+// Set session configuration
+ini_set('session.cookie_httponly', '1');
+ini_set('session.use_only_cookies', '1');
+ini_set('session.cookie_secure', '1');
+
+// Start session if not already started
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
 }
