@@ -12,19 +12,41 @@
 	   <div class="d-flex">
 	       <!-- Sidebar -->
 	       <div class="bg-dark text-white" style="width: 280px; min-height: 100vh;">
-					<!--begin::Primary-->
-					<div class="aside-primary d-flex flex-column align-items-lg-center flex-row-auto">
-						<!--begin::Logo-->
-						<div class="aside-logo d-none d-lg-flex flex-column align-items-center flex-column-auto pt-10" id="kt_aside_logo">
-							<a href="/kasir/index_kasir.php">
-								<img alt="Logo" src="assets/media/logos/logo-compact.svg" class="h-55px" />
-							</a>
-						</div>
-						<!--end::Logo-->
-						<!--begin::Nav-->
-						<div class="aside-nav d-flex flex-column flex-lg-center flex-column-fluid w-100 pt-5 pt-lg-0" id="kt_aside_nav">
-							<!--begin::Primary menu-->
-							<div id="kt_aside_menu" class="menu menu-column menu-title-gray-600 menu-icon-gray-400 menu-state-primary menu-state-icon-primary menu-state-bullet-primary menu-arrow-gray-500 fw-bold fs-5" data-kt-menu="true">
+					       <div class="p-4">
+					           <div class="text-center mb-4">
+					               <img src="laundry.PNG" alt="Logo" class="img-fluid mb-3" style="max-height: 60px;">
+					               <h5 class="mb-0">LaundryApp</h5>
+					           </div>
+
+					           <!-- Navigation Menu -->
+					           <nav class="mt-4">
+					               <div class="mb-3">
+					                   <small class="text-muted text-uppercase">Menu Kasir</small>
+					               </div>
+					               <ul class="nav flex-column">
+					                   <li class="nav-item mb-2">
+					                       <a href="index_kasir.php" class="nav-link text-white active">
+					                           <i class="fas fa-home me-2"></i> Dashboard
+					                       </a>
+					                   </li>
+					                   <li class="nav-item mb-2">
+					                       <a href="transaksi.php" class="nav-link text-white">
+					                           <i class="fas fa-cash-register me-2"></i> Transaksi
+					                       </a>
+					                   </li>
+					                   <li class="nav-item mb-2">
+					                       <a href="member.php" class="nav-link text-white">
+					                           <i class="fas fa-users me-2"></i> Pelanggan
+					                       </a>
+					                   </li>
+					                   <li class="nav-item">
+					                       <a href="logout.php" class="nav-link text-white">
+					                           <i class="fas fa-sign-out-alt me-2"></i> Logout
+					                       </a>
+					                   </li>
+					               </ul>
+					           </nav>
+					       </div>
 								<div class="menu-item py-2">
 									<a class="menu-link active menu-center" href="index_kasir.php" title="Dashboard" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right">
 										<span class="menu-icon me-0">
