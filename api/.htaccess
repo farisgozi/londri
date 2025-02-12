@@ -33,10 +33,6 @@ Header set X-XSS-Protection "1; mode=block"
 Header set X-Frame-Options "SAMEORIGIN"
 Header set Referrer-Policy "strict-origin-when-cross-origin"
 
-# Force HTTPS
-RewriteCond %{HTTPS} !=on
-RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
-
 # Prevent directory listing
 Options -Indexes
 

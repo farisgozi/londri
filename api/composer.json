@@ -15,8 +15,8 @@
     "minimum-stability": "stable",
     "prefer-stable": true,
     "scripts": {
-        "vercel": [
-            "php -S 0.0.0.0:8000 -t ."
+        "dev": [
+            "php -S localhost:8000 -t ."
         ]
     }
 }

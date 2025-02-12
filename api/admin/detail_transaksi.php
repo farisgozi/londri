@@ -1,43 +1,76 @@
+<?php
+include "koneksi.php";
+session_start();
+if(!isset($_SESSION['id_user'])){
+    header('location:../login.php');
+    exit;
+}
+?>
 <!DOCTYPE html>
-<!--
-Author: Keenthemes
-Product Name: Jet HTML Free  - Bootstrap 5 HTML Multipurpose Admin Dashboard Theme
-Upgrade to Pro: https://keenthemes.com/products/jet-html-pro
-Website: http://www.keenthemes.com
-Contact: support@keenthemes.com
-Follow: www.twitter.com/keenthemes
-Dribbble: www.dribbble.com/keenthemes
-Like: www.facebook.com/keenthemes
-License: For each use you must have a valid license purchased only from above link in order to legally use the theme for your project.
--->
 <html lang="en">
-	<!--begin::Head-->
-	<head><base href="../">
-		<meta charset="utf-8" />
-		<title>Laundry App</title>
-		<meta name="description" content="Jet admin dashboard live demo. Check out all the features of the admin panel. A large number of settings, additional services and widgets." />
-		<meta name="keywords" content="Jet theme, bootstrap, bootstrap 5, admin themes, free admin themes, bootstrap admin, bootstrap dashboard" />
-		<link rel="canonical" href="Https://preview.keenthemes.com/jet-free" />
-		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<link rel="shortcut icon" href="assets/media/logos/favicon.ico" />
-		<!--begin::Fonts-->
-		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,600,700" />
-		<!--end::Fonts-->
-		<!--begin::Global Stylesheets Bundle(used by all pages)-->
-		<link href="assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
-		<link href="assets/css/style.bundle.css" rel="stylesheet" type="text/css" />
-		<!--end::Global Stylesheets Bundle-->
-	</head>
-	<!--end::Head-->
-	<!--begin::Body-->
-	<body id="kt_body" class="header-fixed header-tablet-and-mobile-fixed aside-fixed aside-secondary-enabled">
-		<!--begin::Main-->
-		<!--begin::Root-->
-		<div class="d-flex flex-column flex-root">
-			<!--begin::Page-->
-			<div class="page d-flex flex-row flex-column-fluid">
-				<!--begin::Aside-->
-				<div id="kt_aside" class="aside aside-extended bg-white" data-kt-drawer="true" data-kt-drawer-name="aside" data-kt-drawer-activate="{default: true, lg: false}" data-kt-drawer-overlay="true" data-kt-drawer-width="auto" data-kt-drawer-direction="start" data-kt-drawer-toggle="#kt_aside_toggle">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Detail Transaksi | LaundryApp</title>
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/custom.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+	   <div class="d-flex">
+	       <!-- Sidebar -->
+	       <div class="bg-dark text-white" style="width: 280px; min-height: 100vh;">
+	           <div class="p-4">
+	               <div class="text-center mb-4">
+	                   <img src="../admin/laundry.PNG" alt="Logo" class="img-fluid mb-3" style="max-height: 60px;">
+	                   <h5 class="mb-0">LaundryApp</h5>
+	               </div>
+
+	               <!-- Navigation Menu -->
+	               <nav class="mt-4">
+	                   <div class="mb-3">
+	                       <small class="text-muted text-uppercase">Menu Admin</small>
+	                   </div>
+	                   <ul class="nav flex-column">
+	                       <li class="nav-item mb-2">
+	                           <a href="../index_admin.php" class="nav-link text-white">
+	                               <i class="fas fa-home me-2"></i> Dashboard
+	                           </a>
+	                       </li>
+	                       <li class="nav-item mb-2">
+	                           <a href="transaksi.php" class="nav-link text-white active">
+	                               <i class="fas fa-cash-register me-2"></i> Transaksi
+	                           </a>
+	                       </li>
+	                       <li class="nav-item mb-2">
+	                           <a href="member.php" class="nav-link text-white">
+	                               <i class="fas fa-users me-2"></i> Pelanggan
+	                           </a>
+	                       </li>
+	                       <li class="nav-item mb-2">
+	                           <a href="paket.php" class="nav-link text-white">
+	                               <i class="fas fa-box me-2"></i> Paket Laundry
+	                           </a>
+	                       </li>
+	                       <li class="nav-item mb-2">
+	                           <a href="outlet.php" class="nav-link text-white">
+	                               <i class="fas fa-store me-2"></i> Outlet
+	                           </a>
+	                       </li>
+	                       <li class="nav-item mb-2">
+	                           <a href="user.php" class="nav-link text-white">
+	                               <i class="fas fa-user-cog me-2"></i> User
+	                           </a>
+	                       </li>
+	                       <li class="nav-item">
+	                           <a href="logout.php" class="nav-link text-white">
+	                               <i class="fas fa-sign-out-alt me-2"></i> Logout
+	                           </a>
+	                       </li>
+	                   </ul>
+	               </nav>
+	           </div>
+	       </div>
 					<!--begin::Primary-->
 					<div class="aside-primary d-flex flex-column align-items-lg-center flex-row-auto">
 						<!--begin::Logo-->
@@ -344,164 +377,164 @@ License: For each use you must have a valid license purchased only from above li
 											<!--begin::Top-->
 
 
-                                            <div class="col-lg-9 fv-row ">
-                                           
-                                                <h3>Detail Transaksi</h3><br>
-												<table>
-										<tbody>
-										<?php
-											include "koneksi.php";
-											$sql = 'select * from transaksi join member on member.id_member=transaksi.id_member join outlet on outlet.id_outlet=transaksi.id_outlet where transaksi.id_transaksi = '  .$_GET['id_transaksi'];
-											$result = mysqli_query($conn, $sql);
-                                        ?>
-										<?php while( $data_member = mysqli_fetch_assoc($result)) { ?>
-											<a href="./admin/transaksi.php" class="btn btn-secondary">Kembali</a> | 
-											<a href="./admin/cetak_transaksi.php?id_transaksi=<?=$data_member['id_transaksi']?>" target="_blank" class="btn btn-primary">Cetak Laporan Transaksi</a>
-										
-										<tr>
-											<td class="col-lg-4 fw-bold text-muted">ID Transaksi</td>
-											<td></td>
-											<td class="fw-bold fs-6"><?=$data_member['id_transaksi']?></td>
-											
-										</tr>
-										<tr>
-											<td class="col-lg-4 fw-bold text-muted">Nama Member</td>
-											<td></td>
-											<td class="fw-bold fs-6"><?=$data_member['nama_member']?></td>
-										</tr>
-										<tr>
-											<td class="col-lg-4 fw-bold text-muted">Alamat</td>
-											<td></td>
-											<td class="fw-bold fs-6"><?=$data_member['alamat']?></td>
-										</tr>
-										<tr>
-											<td class="col-lg-4 fw-bold text-muted">Jenis Kelamin</td>
-											<td></td>
-											<td class="fw-bold fs-6"><?=$data_member['jenis_kelamin']?></td>
-										</tr>
-										<tr>
-											<td class="col-lg-4 fw-bold text-muted">Telepon</td>
-											<td></td>
-											<td class="fw-bold fs-6"><?=$data_member['tlp']?></td>
-										</tr>
-										<tr>
-											<td class="col-lg-4 fw-bold text-muted">Nama Outlet</td>
-											<td></td>
-											<td class="fw-bold fs-6"><?=$data_member['nama']?></td>
-										</tr>
-										<tr>
-											<td class="col-lg-4 fw-bold text-muted">Status Pembayaran</td>
-											<td></td>
-											<td class="fw-bold fs-6"><?=$data_member['dibayar']?></td>
-										</tr>
-										<tr>
-											<td class="col-lg-4 fw-bold text-muted">Status Order</td>
-											<td></td>
-											<td class="fw-bold fs-6"><?=$data_member['status']?></td>
-										</tr>
-										<tr>
-											<td class="col-lg-4 fw-bold text-muted">Tanggal Diambil</td>
-											<td></td>
-											<td class="fw-bold fs-6"><?=$data_member['batas_waktu']?></td>
-										</tr>
-										
-										<?php
-										}
-										?>
-		 							</tbody>
-									</table>
-
-									<br><br>
-									<table class="table table-hover">
-															<tr>
-																<th>No</th>
-																<th>Tanggal Order</th>
-																<th>Tanggal Bayar</th>
-																<th>Paket Laundry</th>
-																<th>Berat Cucian</th>
-																<th>Harga/Kg</th>
-																<th>Subtotal</th>
-																<th>Aksi Edit</th>
-															</tr>
-															<tbody>
-																
-															<?php
-															include "koneksi.php";
-															$qry_pembayaran=mysqli_query($conn,"select * from transaksi join detail_transaksi on detail_transaksi.id_transaksi = transaksi.id_transaksi join paket on paket.id_paket=transaksi.id_paket where transaksi.id_transaksi = " .$_GET['id_transaksi'] );
-															$no=0;
-															while($data_pembayaran=mysqli_fetch_array($qry_pembayaran)){
-																$harga = $data_pembayaran['harga'];
-                                                                $qty = $data_pembayaran['qty'];
-                                                                $total = $harga*$qty;
-															$no++;?>
-																	<tr class="text-xs font-weight-bold">
-																		<td class="align-middle text-left"><?=$no?></td>
-																		<td class="align-middle text-left"><?=$data_pembayaran['tgl']?></td>
-																		<td class="align-middle text-left"><?=$data_pembayaran['tgl_bayar']?></td>
-																		<td class="align-middle text-left"><?=$data_pembayaran['nama_paket']?></td> 
-																		<td class="align-middle text-left"><?=$data_pembayaran['qty']?></td>
-																		<td class="align-middle text-left"><?=$data_pembayaran['harga']?></td>
-																		<td class="align-middle text-left">Rp.<?=$total?></td>
-                                                                        <td class="align-middle text-left">
-                                                                        <a class="btn btn-success" href="./admin/ubah_detail_transaksi.php?id_transaksi=<?=$data_pembayaran['id_transaksi']?>" ><i class="far fa-edit"></i></a></td>
-                                                                        </td>
-																		</tr>
-																	<?php
-																	}
-																	?>
-														</tbody>
-													</table>
-									
-													
-                                                    
-
-										</div>
-										<!--end::Wrapper-->
-									</div>
-									<!--end::Actions-->
-								</form>
-								<!--end::Form-->
-							</div>
-							<!--end::Content-->
-						</div>
-						<!--end::Stepper-->
-					</div>
-					<!--end::Modal body-->
+            <!-- Content -->
+            <div class="container-fluid p-4">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-white py-3">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0 text-dark">Detail Transaksi</h5>
+                            <div>
+                                <a href="transaksi.php" class="btn btn-secondary btn-sm me-2">
+                                    <i class="fas fa-arrow-left me-2"></i>Kembali
+                                </a>
+                                <?php
+                                $sql = 'select * from transaksi join member on member.id_member=transaksi.id_member join outlet on outlet.id_outlet=transaksi.id_outlet where transaksi.id_transaksi = '  .$_GET['id_transaksi'];
+                                $result = mysqli_query($conn, $sql);
+                                $data_member = mysqli_fetch_assoc($result);
+                                ?>
+                                <a href="cetak_transaksi.php?id_transaksi=<?=$data_member['id_transaksi']?>" target="_blank" class="btn btn-primary btn-sm">
+                                    <i class="fas fa-print me-2"></i>Cetak Laporan
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body p-4">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="card border mb-4">
+                                    <div class="card-header bg-light py-2">
+                                        <h6 class="mb-0">Informasi Pelanggan</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <table class="table table-borderless mb-0">
+                                            <tr>
+                                                <td width="35%" class="text-muted">ID Transaksi</td>
+                                                <td class="fw-bold"><?=$data_member['id_transaksi']?></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-muted">Nama Member</td>
+                                                <td class="fw-bold"><?=$data_member['nama_member']?></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-muted">Alamat</td>
+                                                <td class="fw-bold"><?=$data_member['alamat']?></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-muted">Jenis Kelamin</td>
+                                                <td class="fw-bold"><?=$data_member['jenis_kelamin']?></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-muted">Telepon</td>
+                                                <td class="fw-bold"><?=$data_member['tlp']?></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-muted">Nama Outlet</td>
+                                                <td class="fw-bold"><?=$data_member['nama']?></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="card border mb-4">
+                                    <div class="card-header bg-light py-2">
+                                        <h6 class="mb-0">Status Transaksi</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <table class="table table-borderless mb-0">
+                                            <tr>
+                                                <td width="35%" class="text-muted">Status Pembayaran</td>
+                                                <td><span class="badge <?=$data_member['dibayar']=='dibayar'?'bg-success':'bg-danger'?>"><?=ucfirst($data_member['dibayar'])?></span></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-muted">Status Order</td>
+                                                <td>
+                                                    <?php
+                                                    $status_class = '';
+                                                    switch($data_member['status']) {
+                                                        case 'baru':
+                                                            $status_class = 'bg-info';
+                                                            break;
+                                                        case 'proses':
+                                                            $status_class = 'bg-warning';
+                                                            break;
+                                                        case 'selesai':
+                                                            $status_class = 'bg-success';
+                                                            break;
+                                                        case 'diambil':
+                                                            $status_class = 'bg-primary';
+                                                            break;
+                                                    }
+                                                    ?>
+                                                    <span class="badge <?=$status_class?>"><?=ucfirst($data_member['status'])?></span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-muted">Tanggal Diambil</td>
+                                                <td class="fw-bold"><?=$data_member['batas_waktu']?></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                                </table>
+                            </div>
+                        </div>
+                        
+                        <div class="card border">
+                            <div class="card-header bg-light py-2">
+                                <h6 class="mb-0">Detail Paket</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-hover align-middle">
+                                        <thead class="bg-light">
+                                            <tr>
+                                                <th class="text-center" width="5%">No</th>
+                                                <th>Tanggal Order</th>
+                                                <th>Tanggal Bayar</th>
+                                                <th>Paket Laundry</th>
+                                                <th class="text-center">Berat Cucian</th>
+                                                <th class="text-end">Harga/Kg</th>
+                                                <th class="text-end">Subtotal</th>
+                                                <th class="text-center" width="8%">Aksi</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php
+                                            $qry_pembayaran = mysqli_query($conn, "select * from transaksi join detail_transaksi on detail_transaksi.id_transaksi = transaksi.id_transaksi join paket on paket.id_paket=transaksi.id_paket where transaksi.id_transaksi = " .$_GET['id_transaksi']);
+                                            $no = 1;
+                                            while($data_pembayaran = mysqli_fetch_array($qry_pembayaran)) {
+                                                $harga = $data_pembayaran['harga'];
+                                                $qty = $data_pembayaran['qty'];
+                                                $total = $harga * $qty;
+                                            ?>
+                                            <tr>
+                                                <td class="text-center"><?=$no++?></td>
+                                                <td><?=date('d/m/Y', strtotime($data_pembayaran['tgl']))?></td>
+                                                <td><?=$data_pembayaran['tgl_bayar'] ? date('d/m/Y', strtotime($data_pembayaran['tgl_bayar'])) : '-'?></td>
+                                                <td><?=$data_pembayaran['nama_paket']?></td>
+                                                <td class="text-center"><?=$data_pembayaran['qty']?> kg</td>
+                                                <td class="text-end">Rp <?=number_format($data_pembayaran['harga'], 0, ',', '.')?></td>
+                                                <td class="text-end">Rp <?=number_format($total, 0, ',', '.')?></td>
+                                                <td class="text-center">
+                                                    <a href="ubah_detail_transaksi.php?id_transaksi=<?=$data_pembayaran['id_transaksi']?>" class="btn btn-sm btn-success">
+                                                        <i class="fas fa-edit"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                            <?php } ?>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+									           </div>
+									       </div>
+									   </div>
+								</div>
 				</div>
-				<!--end::Modal content-->
-			</div>
-			<!--end::Modal dialog-->
-		</div>
-		<!--end::Modal - Create App-->
-		<!--end::Modals-->
-		<!--begin::Scrolltop-->
-		<div id="kt_scrolltop" class="scrolltop" data-kt-scrolltop="true">
-			<!--begin::Svg Icon | path: icons/duotone/Navigation/Up-2.svg-->
-			<span class="svg-icon">
-				<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-					<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-						<polygon points="0 0 24 0 24 24 0 24" />
-						<rect fill="#000000" opacity="0.5" x="11" y="10" width="2" height="10" rx="1" />
-						<path d="M6.70710678,12.7071068 C6.31658249,13.0976311 5.68341751,13.0976311 5.29289322,12.7071068 C4.90236893,12.3165825 4.90236893,11.6834175 5.29289322,11.2928932 L11.2928932,5.29289322 C11.6714722,4.91431428 12.2810586,4.90106866 12.6757246,5.26284586 L18.6757246,10.7628459 C19.0828436,11.1360383 19.1103465,11.7686056 18.7371541,12.1757246 C18.3639617,12.5828436 17.7313944,12.6103465 17.3242754,12.2371541 L12.0300757,7.38413782 L6.70710678,12.7071068 Z" fill="#000000" fill-rule="nonzero" />
-					</g>
-				</svg>
-			</span>
-			<!--end::Svg Icon-->
-		</div>
-		<!--end::Scrolltop-->
-		<!--end::Main-->
-		<!--begin::Javascript-->
-		<!--begin::Global Javascript Bundle(used by all pages)-->
-		<script src="assets/plugins/global/plugins.bundle.js"></script>
-		<script src="assets/js/scripts.bundle.js"></script>
-		<!--end::Global Javascript Bundle-->
-		<!--begin::Page Vendors Javascript(used by this page)-->
-		<script src="assets/plugins/custom/fslightbox/fslightbox.bundle.js"></script>
-		<!--end::Page Vendors Javascript-->
-		<!--begin::Page Custom Javascript(used by this page)-->
-		<script src="assets/js/custom/widgets.js"></script>
-		<!--end::Page Custom Javascript-->
-		<!--end::Javascript-->
-	</body>
-	<!--end::Body-->
+
+				<script src="../js/bootstrap.bundle.min.js"></script>
+</body>
 </html>
