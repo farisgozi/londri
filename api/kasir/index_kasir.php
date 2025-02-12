@@ -14,7 +14,7 @@ License: For each use you must have a valid license purchased only from above li
 	<!--begin::Head-->
 	<head><base href="../">
 		<meta charset="utf-8" />
-		<title>Laundry App</title>
+		<title>YeoLaundry</title>
 		<meta name="description" content="Jet admin dashboard live demo. Check out all the features of the admin panel. A large number of settings, additional services and widgets." />
 		<meta name="keywords" content="Jet theme, bootstrap, bootstrap 5, admin themes, free admin themes, bootstrap admin, bootstrap dashboard" />
 		<link rel="canonical" href="Https://preview.keenthemes.com/jet-free" />
@@ -42,7 +42,7 @@ License: For each use you must have a valid license purchased only from above li
 					<div class="aside-primary d-flex flex-column align-items-lg-center flex-row-auto">
 						<!--begin::Logo-->
 						<div class="aside-logo d-none d-lg-flex flex-column align-items-center flex-column-auto pt-10" id="kt_aside_logo">
-							<a href="index_kasir.php">
+							<a href="/kasir/index_kasir.php">
 								<img alt="Logo" src="assets/media/logos/logo-compact.svg" class="h-55px" />
 							</a>
 						</div>
