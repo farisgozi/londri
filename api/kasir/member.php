@@ -132,8 +132,8 @@
                                                         <div class="mb-3">
                                                             <label class="form-label">Jenis Kelamin</label>
                                                             <select name="jenis_kelamin" class="form-select" required>
-                                                                <option value="L" <?php if($data_member['jenis_kelamin']=='L') echo 'selected'; ?>>Laki-laki</option>
-                                                                <option value="P" <?php if($data_member['jenis_kelamin']=='P') echo 'selected'; ?>>Perempuan</option>
+                                                                <option value="Laki-laki" <?php if($data_member['jenis_kelamin']=='Laki-laki') echo 'selected'; ?>>Laki-laki</option>
+                                                                <option value="Perempuan" <?php if($data_member['jenis_kelamin']=='Perempuan') echo 'selected'; ?>>Perempuan</option>
                                                             </select>
                                                         </div>
                                                         <div class="mb-3">
