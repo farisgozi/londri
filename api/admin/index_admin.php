@@ -14,7 +14,7 @@
         <div class="bg-dark text-white" style="width: 280px; min-height: 100vh;">
             <div class="p-4">
                 <div class="text-center mb-4">
-                    <img src="admin/laundry.PNG" alt="Logo" class="img-fluid mb-3" style="max-height: 60px;">
+                    <img src="laundry.PNG" alt="Logo" class="img-fluid mb-3" style="max-height: 60px;">
                     <h5 class="mb-0">LaundryApp</h5>
                 </div>
 
