@@ -97,7 +97,7 @@ $default_batas_waktu = date('Y-m-d', strtotime('+3 days'));
                                 </thead>
                                 <tbody>
                                     <?php
-                                    $qry_transaksi = mysqli_query($conn, "SELECT t.*, o.nama as outlet_nama, m.nama_member, p.nama_paket, dt.qty 
+                                    $qry_transaksi = mysqli_query($conn, "SELECT t.*, o.nama as outlet_nama, m.nama_member, p.nama_paket, p.harga, dt.qty
                                                                         FROM transaksi t 
                                                                         JOIN outlet o ON t.id_outlet = o.id_outlet 
                                                                         JOIN member m ON t.id_member = m.id_member 
