@@ -42,7 +42,7 @@ License: For each use you must have a valid license purchased only from above li
 					<div class="aside-primary d-flex flex-column align-items-lg-center flex-row-auto">
 						<!--begin::Logo-->
 						<div class="aside-logo d-none d-lg-flex flex-column align-items-center flex-column-auto pt-10" id="kt_aside_logo">
-							<a href="index_kasir.php">
+							<a href="/kasir/index_kasir.php">
 								<img alt="Logo" src="assets/media/logos/logo-compact.svg" class="h-55px" />
 							</a>
 						</div>
