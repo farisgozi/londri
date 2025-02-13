@@ -218,6 +218,9 @@
                                     <a href="admin/paket.php" class="btn btn-info">
                                         <i class="fas fa-box-open me-2"></i>Kelola Paket
                                     </a>
+                                    <a href="admin/cetak_laporan.php" class="btn btn-secondary">
+                                        <i class="fas fa-print me-2"></i>Cetak Laporan
+                                    </a>
                                 </div>
                             </div>
                         </div>
