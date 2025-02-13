@@ -91,6 +91,8 @@ $default_batas_waktu = date('Y-m-d', strtotime('+3 days'));
                                         <th>Status Bayar</th>
                                         <th>Customer</th>
                                         <th>Paket</th>
+                                        <th>Harga/Kg</th>
+                                        <th>Subtotal</th>
                                         <th>Status Order</th>
                                         <th>Aksi</th>
                                     </tr>
