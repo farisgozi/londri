@@ -18,7 +18,7 @@ if($_POST){
     }
 
     if(empty($nama_member)){
-        echo "<script>alert('Nama member tidak boleh kosong');location.href='member.php';</script>";
+        echo "<script>alert('Nama member tidak boleh kosong');location.href='./member.php';</script>";
     } elseif(empty($tlp)){
         echo "<script>alert('No Telp tidak boleh kosong');location.href='./member.php';</script>";
     } else {
@@ -27,9 +27,9 @@ if($_POST){
         VALUES ('$nama_member','$alamat','$jenis_kelamin','$tlp')") or
         die(mysqli_error($conn));
         if($insert){
-            echo "<script>alert('Sukses menambahkan member');location.href='member.php';</script>";
+            echo "<script>alert('Sukses menambahkan member');location.href='./member.php';</script>";
         } else {
-            echo "<script>alert('Gagal menambahkan member');location.href='member.php';</script>";
+            echo "<script>alert('Gagal menambahkan member');location.href='./member.php';</script>";
         }
     }
 }
