@@ -5,9 +5,13 @@ if($_POST){
     $jenis_kelamin = $_POST['jenis_kelamin'];
     $tlp = $_POST['tlp'];
 
-    // Validate jenis_kelamin enum
-    if(!in_array($jenis_kelamin, ['Laki-laki', 'Perempuan'])) {
-        echo "<script>alert('Jenis kelamin harus Laki-laki atau Perempuan');location.href='member.php';</script>";
+    // Map L/P to full text as per database enum
+    if($jenis_kelamin == 'L') {
+        $jenis_kelamin = 'Laki-laki';
+    } elseif($jenis_kelamin == 'P') {
+        $jenis_kelamin = 'Perempuan';
+    } else {
+        echo "<script>alert('Jenis kelamin tidak valid');location.href='member.php';</script>";
         exit;
     }
 
