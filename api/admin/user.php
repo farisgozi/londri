@@ -1,3 +1,6 @@
+<?php
+include "koneksi.php";
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -91,13 +94,13 @@
                                         <th>Nama User</th>
                                         <th>Username</th>
                                         <th>Role</th>
+                                        <th>Outlet</th>
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php
-                                    include "koneksi.php";
-                                    $qry_user = mysqli_query($conn, "SELECT * FROM user ORDER BY nama_user");
+                                    $qry_user = mysqli_query($conn, "SELECT u.*, o.nama as nama_outlet FROM user u JOIN outlet o ON u.id_outlet = o.id_outlet ORDER BY u.nama_user");
                                     $no = 1;
                                     while($data_user = mysqli_fetch_array($qry_user)){
                                     ?>
@@ -106,6 +109,7 @@
                                         <td><?php echo $data_user['nama_user']; ?></td>
                                         <td><?php echo $data_user['username']; ?></td>
                                         <td><?php echo ucfirst($data_user['role']); ?></td>
+                                        <td><?php echo $data_user['nama_outlet']; ?></td>
                                         <td>
                                             <div class="btn-group">
                                                 <button type="button" class="btn btn-sm btn-info" 
@@ -142,6 +146,23 @@
                                                             <label class="form-label">Username</label>
                                                             <input type="text" name="username" class="form-control" 
                                                                    value="<?php echo $data_user['username']; ?>" required>
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label class="form-label">Password Baru</label>
+                                                            <input type="password" name="password" class="form-control">
+                                                            <small class="text-muted">Kosongkan jika tidak ingin mengubah password</small>
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label class="form-label">Outlet</label>
+                                                            <select name="id_outlet" class="form-select" required>
+                                                                <?php
+                                                                $qry_outlet = mysqli_query($conn, "SELECT * FROM outlet ORDER BY nama");
+                                                                while($outlet = mysqli_fetch_array($qry_outlet)){
+                                                                    $selected = ($outlet['id_outlet'] == $data_user['id_outlet']) ? 'selected' : '';
+                                                                    echo "<option value='".$outlet['id_outlet']."' ".$selected.">".$outlet['nama']."</option>";
+                                                                }
+                                                                ?>
+                                                            </select>
                                                         </div>
                                                         <div class="mb-3">
                                                             <label class="form-label">Role</label>
@@ -187,6 +208,22 @@
                         <div class="mb-3">
                             <label class="form-label">Username</label>
                             <input type="text" name="username" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Password</label>
+                            <input type="password" name="password" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Outlet</label>
+                            <select name="id_outlet" class="form-select" required>
+                                <option value="">Pilih Outlet</option>
+                                <?php
+                                $qry_outlet = mysqli_query($conn, "SELECT * FROM outlet ORDER BY nama");
+                                while($outlet = mysqli_fetch_array($qry_outlet)){
+                                    echo "<option value='".$outlet['id_outlet']."'>".$outlet['nama']."</option>";
+                                }
+                                ?>
+                            </select>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Role</label>
