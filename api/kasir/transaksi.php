@@ -121,6 +121,8 @@ $default_batas_waktu = date('Y-m-d', strtotime('+3 days'));
                                         </td>
                                         <td><?php echo $data['nama_member']; ?></td>
                                         <td><?php echo $data['nama_paket']; ?> (<?php echo $data['qty']; ?> pcs)</td>
+                                        <td>Rp <?php echo number_format($data['harga'], 0, ',', '.'); ?></td>
+                                        <td>Rp <?php echo number_format($data['harga'] * $data['qty'], 0, ',', '.'); ?></td>
                                         <td>
                                             <?php
                                             $status_class = '';
