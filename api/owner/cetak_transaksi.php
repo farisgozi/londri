@@ -14,7 +14,7 @@
             color: #333;
             padding: 0;
             margin: 0;
-            font-size: 14px; /* Larger font size for A3 */
+            font-size: 14px;
         }
         .header-section {
             text-align: center;
@@ -40,6 +40,49 @@
             text-align: right;
             margin: 20px 0;
             font-size: 14px;
+        }
+        .summary-section {
+            margin: 30px 0;
+            page-break-inside: avoid;
+        }
+        .summary-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+        }
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        .summary-box {
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        .summary-box h5 {
+            margin: 0 0 10px 0;
+            font-size: 14px;
+            color: #666;
+        }
+        .summary-box .value {
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .status-box {
+            text-align: center;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 5px;
         }
         table {
             width: 100%;
@@ -74,7 +117,6 @@
         .terms li {
             margin-bottom: 8px;
         }
-        /* Column widths for A3 portrait */
         .col-no { width: 5%; }
         .col-outlet { width: 12%; }
         .col-date { width: 10%; }
@@ -85,9 +127,8 @@
         .col-package { width: 18%; }
         .col-status { width: 10%; }
         
-        /* Ensure content fits A3 portrait */
         .container {
-            max-width: 257mm; /* A3 width minus margins */
+            max-width: 257mm;
             margin: 0 auto;
         }
         
@@ -96,7 +137,6 @@
                 background-color: #f8f9fa !important;
                 -webkit-print-color-adjust: exact;
             }
-            /* Ensure table header repeats on each page */
             thead {
                 display: table-header-group;
             }
@@ -119,6 +159,117 @@
             <strong>Tanggal Cetak:</strong> <?php echo date('l, d-m-Y'); ?>
         </div>
 
+        <?php
+        // Calculate summary statistics
+        include "koneksi.php";
+        
+        // Total Revenue
+        $result = mysqli_query($conn, "SELECT SUM(p.harga) as total_revenue 
+                                     FROM transaksi t 
+                                     JOIN paket p ON t.id_paket = p.id_paket 
+                                     WHERE t.dibayar = 'dibayar'");
+        $total_revenue = mysqli_fetch_assoc($result)['total_revenue'] ?? 0;
+
+        // Total Transactions
+        $result = mysqli_query($conn, "SELECT COUNT(*) as total FROM transaksi");
+        $total_transactions = mysqli_fetch_assoc($result)['total'];
+
+        // Status Distribution
+        $status_dist = mysqli_query($conn, "SELECT status, COUNT(*) as count 
+                                          FROM transaksi 
+                                          GROUP BY status");
+        $status_counts = [];
+        while($row = mysqli_fetch_assoc($status_dist)) {
+            $status_counts[$row['status']] = $row['count'];
+        }
+
+        // Payment Status
+        $payment_dist = mysqli_query($conn, "SELECT dibayar, COUNT(*) as count 
+                                           FROM transaksi 
+                                           GROUP BY dibayar");
+        $payment_counts = [];
+        while($row = mysqli_fetch_assoc($payment_dist)) {
+            $payment_counts[$row['dibayar']] = $row['count'];
+        }
+
+        // Revenue by Outlet
+        $outlet_revenue = mysqli_query($conn, "SELECT o.nama, COUNT(*) as transactions, 
+                                             SUM(p.harga) as revenue
+                                             FROM transaksi t 
+                                             JOIN outlet o ON t.id_outlet = o.id_outlet
+                                             JOIN paket p ON t.id_paket = p.id_paket
+                                             WHERE t.dibayar = 'dibayar'
+                                             GROUP BY o.id_outlet");
+        ?>
+
+        <div class="summary-section">
+            <div class="summary-title">Rekapitulasi Statistik Penjualan</div>
+            
+            <div class="summary-grid">
+                <div class="summary-box">
+                    <h5>Total Pendapatan</h5>
+                    <div class="value">Rp <?= number_format($total_revenue, 0, ',', '.') ?></div>
+                </div>
+                <div class="summary-box">
+                    <h5>Total Transaksi</h5>
+                    <div class="value"><?= number_format($total_transactions) ?></div>
+                </div>
+            </div>
+
+            <div class="summary-title">Status Transaksi</div>
+            <div class="status-grid">
+                <div class="status-box">
+                    <h5>Baru</h5>
+                    <div class="value"><?= number_format($status_counts['baru'] ?? 0) ?></div>
+                </div>
+                <div class="status-box">
+                    <h5>Proses</h5>
+                    <div class="value"><?= number_format($status_counts['proses'] ?? 0) ?></div>
+                </div>
+                <div class="status-box">
+                    <h5>Selesai</h5>
+                    <div class="value"><?= number_format($status_counts['selesai'] ?? 0) ?></div>
+                </div>
+                <div class="status-box">
+                    <h5>Diambil</h5>
+                    <div class="value"><?= number_format($status_counts['diambil'] ?? 0) ?></div>
+                </div>
+            </div>
+
+            <div class="summary-title">Status Pembayaran</div>
+            <div class="summary-grid">
+                <div class="summary-box">
+                    <h5>Sudah Dibayar</h5>
+                    <div class="value"><?= number_format($payment_counts['dibayar'] ?? 0) ?></div>
+                </div>
+                <div class="summary-box">
+                    <h5>Belum Dibayar</h5>
+                    <div class="value"><?= number_format($payment_counts['belum dibayar'] ?? 0) ?></div>
+                </div>
+            </div>
+
+            <div class="summary-title">Pendapatan per Outlet</div>
+            <table class="mb-4">
+                <thead>
+                    <tr>
+                        <th>Outlet</th>
+                        <th>Jumlah Transaksi</th>
+                        <th>Total Pendapatan</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php while($row = mysqli_fetch_assoc($outlet_revenue)) { ?>
+                    <tr>
+                        <td><?= $row['nama'] ?></td>
+                        <td><?= number_format($row['transactions']) ?></td>
+                        <td>Rp <?= number_format($row['revenue'], 0, ',', '.') ?></td>
+                    </tr>
+                    <?php } ?>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="summary-title">Detail Transaksi</div>
         <table>
             <thead>
                 <tr>
@@ -135,7 +286,6 @@
             </thead>
             <tbody>
                 <?php
-                include "koneksi.php";
                 $qry_transaksi = mysqli_query($conn, "SELECT t.*, o.nama as nama_outlet, m.nama_member, p.nama_paket 
                                                     FROM transaksi t 
                                                     JOIN outlet o ON o.id_outlet = t.id_outlet 
