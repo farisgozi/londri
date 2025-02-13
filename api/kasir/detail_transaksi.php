@@ -204,10 +204,10 @@
                                 </thead>
                                 <tbody>
                                     <?php
-                                    $qry_detail = mysqli_query($conn, "SELECT dt.*, p.nama_paket, t.tgl, t.tgl_bayar 
-                                                                    FROM detail_transaksi dt 
-                                                                    JOIN transaksi t ON dt.id_transaksi = t.id_transaksi 
-                                                                    JOIN paket p ON t.id_paket = p.id_paket 
+                                    $qry_detail = mysqli_query($conn, "SELECT dt.*, p.nama_paket, p.harga, t.tgl, t.tgl_bayar
+                                                                     FROM detail_transaksi dt
+                                                                     JOIN transaksi t ON dt.id_transaksi = t.id_transaksi
+                                                                     JOIN paket p ON dt.id_paket = p.id_paket
                                                                     WHERE dt.id_transaksi = $id_transaksi");
                                     $no = 1;
                                     $total = 0;
