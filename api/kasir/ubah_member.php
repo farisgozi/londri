@@ -52,7 +52,7 @@ License: For each use you must have a valid license purchased only from above li
 							<!--begin::Primary menu-->
 							<div id="kt_aside_menu" class="menu menu-column menu-title-gray-600 menu-icon-gray-400 menu-state-primary menu-state-icon-primary menu-state-bullet-primary menu-arrow-gray-500 fw-bold fs-5" data-kt-menu="true">
 								<div class="menu-item py-2">
-									<a class="menu-link menu-center" href="index_kasir.php" title="Dashboard" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right">
+									<a class="menu-link menu-center" href="/kasir/index_kasir.php" title="Dashboard" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right">
 										<span class="menu-icon me-0">
 											<!--begin::Svg Icon | path: icons/duotone/Home/Home2.svg-->
 											<span class="svg-icon svg-icon-1">
