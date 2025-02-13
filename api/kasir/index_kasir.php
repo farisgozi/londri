@@ -152,7 +152,7 @@
                                     <a href="member.php" class="btn btn-success">
                                         <i class="fas fa-user-plus me-2"></i>Tambah Pelanggan
                                     </a>
-                                    <a href="cetak_transaksi.php" class="btn btn-info">
+                                    <a href="cetak_laporan.php" class="btn btn-info">
                                         <i class="fas fa-print me-2"></i>Cetak Laporan
                                     </a>
                                 </div>
