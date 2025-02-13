@@ -37,7 +37,7 @@ $default_batas_waktu = date('Y-m-d', strtotime('+3 days'));
                     </div>
                     <ul class="nav flex-column">
                         <li class="nav-item mb-2">
-                            <a href="../index_kasir.php" class="nav-link text-white">
+                            <a href="index_kasir.php" class="nav-link text-white">
                                 <i class="fas fa-home me-2"></i> Dashboard
                             </a>
                         </li>
