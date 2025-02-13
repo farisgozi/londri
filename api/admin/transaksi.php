@@ -26,18 +26,18 @@ $default_batas_waktu = date('Y-m-d', strtotime('+3 days'));
         <div class="bg-dark text-white" style="width: 280px; min-height: 100vh;">
             <div class="p-4">
                 <div class="text-center mb-4">
-                    <img src="../admin/laundry.PNG" alt="Logo" class="img-fluid mb-3" style="max-height: 60px;">
+                    <img src="laundry.PNG" alt="Logo" class="img-fluid mb-3" style="max-height: 60px;">
                     <h5 class="mb-0">LaundryApp</h5>
                 </div>
 
                 <!-- Navigation Menu -->
                 <nav class="mt-4">
                     <div class="mb-3">
-                        <small class="text-muted text-uppercase">Menu Admin</small>
+                        <small class="text-muted text-uppercase">Menu Kasir</small>
                     </div>
                     <ul class="nav flex-column">
                         <li class="nav-item mb-2">
-                            <a href="../index_admin.php" class="nav-link text-white">
+                            <a href="index_kasir.php" class="nav-link text-white">
                                 <i class="fas fa-home me-2"></i> Dashboard
                             </a>
                         </li>
@@ -49,21 +49,6 @@ $default_batas_waktu = date('Y-m-d', strtotime('+3 days'));
                         <li class="nav-item mb-2">
                             <a href="member.php" class="nav-link text-white">
                                 <i class="fas fa-users me-2"></i> Pelanggan
-                            </a>
-                        </li>
-                        <li class="nav-item mb-2">
-                            <a href="paket.php" class="nav-link text-white">
-                                <i class="fas fa-box me-2"></i> Paket Laundry
-                            </a>
-                        </li>
-                        <li class="nav-item mb-2">
-                            <a href="outlet.php" class="nav-link text-white">
-                                <i class="fas fa-store me-2"></i> Outlet
-                            </a>
-                        </li>
-                        <li class="nav-item mb-2">
-                            <a href="user.php" class="nav-link text-white">
-                                <i class="fas fa-user-cog me-2"></i> User
                             </a>
                         </li>
                         <li class="nav-item">
@@ -81,7 +66,7 @@ $default_batas_waktu = date('Y-m-d', strtotime('+3 days'));
             <!-- Top Navbar -->
             <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
                 <div class="container-fluid">
-                    <span class="navbar-brand mb-0 h1">Transaksi</span>
+                    <span class="navbar-brand mb-0 h1">Transaksi Laundry</span>
                 </div>
             </nav>
 
@@ -106,13 +91,15 @@ $default_batas_waktu = date('Y-m-d', strtotime('+3 days'));
                                         <th>Status Bayar</th>
                                         <th>Customer</th>
                                         <th>Paket</th>
+                                        <th>Harga/Kg</th>
+                                        <th>Subtotal</th>
                                         <th>Status Order</th>
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php
-                                    $qry_transaksi = mysqli_query($conn, "SELECT t.*, o.nama as outlet_nama, m.nama_member, p.nama_paket, dt.qty 
+                                    $qry_transaksi = mysqli_query($conn, "SELECT t.*, o.nama as outlet_nama, m.nama_member, p.nama_paket, p.harga, dt.qty
                                                                         FROM transaksi t 
                                                                         JOIN outlet o ON t.id_outlet = o.id_outlet 
                                                                         JOIN member m ON t.id_member = m.id_member 
@@ -134,6 +121,8 @@ $default_batas_waktu = date('Y-m-d', strtotime('+3 days'));
                                         </td>
                                         <td><?php echo $data['nama_member']; ?></td>
                                         <td><?php echo $data['nama_paket']; ?> (<?php echo $data['qty']; ?> pcs)</td>
+                                        <td>Rp <?php echo number_format($data['harga'], 0, ',', '.'); ?></td>
+                                        <td>Rp <?php echo number_format($data['harga'] * $data['qty'], 0, ',', '.'); ?></td>
                                         <td>
                                             <?php
                                             $status_class = '';
@@ -211,18 +200,6 @@ $default_batas_waktu = date('Y-m-d', strtotime('+3 days'));
                                     $qry_member = mysqli_query($conn, "SELECT * FROM member ORDER BY nama_member");
                                     while($member = mysqli_fetch_array($qry_member)){
                                         echo "<option value='".$member['id_member']."'>".$member['nama_member']."</option>";
-                                    }
-                                    ?>
-                                </select>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label">User</label>
-                                <select name="id_user" class="form-select" required>
-                                    <option value="">Pilih User</option>
-                                    <?php
-                                    $qry_user = mysqli_query($conn, "SELECT * FROM user ORDER BY nama_user");
-                                    while($user = mysqli_fetch_array($qry_user)){
-                                        echo "<option value='".$user['id_user']."'>".$user['nama_user']." (".$user['role'].")</option>";
                                     }
                                     ?>
                                 </select>
