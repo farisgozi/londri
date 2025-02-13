@@ -5,9 +5,11 @@ if($_POST){
     $id_member = isset($_POST['id_member']) ? $_POST['id_member'] : null;
     $id_outlet = isset($_POST['id_outlet']) ? $_POST['id_outlet'] : null;
     $id_paket = isset($_POST['id_paket']) ? $_POST['id_paket'] : null;
-    $id_user = isset($_POST['id_user']) ? $_POST['id_user'] : null;
     $qty = isset($_POST['qty']) ? (int)$_POST['qty'] : 1;
     $keterangan = isset($_POST['keterangan']) ? $_POST['keterangan'] : '';
+    
+    session_start();
+    $id_user = isset($_SESSION['id_user']) ? $_SESSION['id_user'] : null;
     
     // Get dates
     $tgl = isset($_POST['tgl']) ? $_POST['tgl'] : date('Y-m-d');
@@ -22,7 +24,7 @@ if($_POST){
     if(empty($id_member)){
         echo "<script>alert('Id member tidak boleh kosong');location.href='transaksi.php';</script>";
     } elseif(empty($id_user)){
-        echo "<script>alert('Id user tidak boleh kosong');location.href='transaksi.php';</script>";
+        echo "<script>alert('Sesi user tidak valid. Silakan login ulang');location.href='../login.php';</script>";
     } elseif(empty($id_outlet)){
         echo "<script>alert('Id outlet tidak boleh kosong');location.href='transaksi.php';</script>";
     } elseif(empty($id_paket)){

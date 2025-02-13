@@ -30,32 +30,32 @@
                             </a>
                         </li>
                         <li class="nav-item mb-2">
-                            <a href="admin/transaksi.php" class="nav-link text-white">
+                            <a href="transaksi.php" class="nav-link text-white">
                                 <i class="fas fa-cash-register me-2"></i> Transaksi
                             </a>
                         </li>
                         <li class="nav-item mb-2">
-                            <a href="admin/member.php" class="nav-link text-white">
+                            <a href="member.php" class="nav-link text-white">
                                 <i class="fas fa-users me-2"></i> Pelanggan
                             </a>
                         </li>
                         <li class="nav-item mb-2">
-                            <a href="admin/paket.php" class="nav-link text-white">
+                            <a href="paket.php" class="nav-link text-white">
                                 <i class="fas fa-box me-2"></i> Paket Laundry
                             </a>
                         </li>
                         <li class="nav-item mb-2">
-                            <a href="admin/outlet.php" class="nav-link text-white">
+                            <a href="outlet.php" class="nav-link text-white">
                                 <i class="fas fa-store me-2"></i> Outlet
                             </a>
                         </li>
                         <li class="nav-item mb-2">
-                            <a href="admin/user.php" class="nav-link text-white">
+                            <a href="user.php" class="nav-link text-white">
                                 <i class="fas fa-user-cog me-2"></i> User
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="admin/logout.php" class="nav-link text-white">
+                            <a href="logout.php" class="nav-link text-white">
                                 <i class="fas fa-sign-out-alt me-2"></i> Logout
                             </a>
                         </li>
@@ -81,7 +81,7 @@
 
             <!-- Content -->
             <div class="container-fluid p-4">
-                <?php include 'admin/koneksi.php'; ?>
+                <?php include 'koneksi.php'; ?>
                 
                 <!-- Welcome Card -->
                 <div class="row mb-4">
@@ -209,16 +209,16 @@
                             </div>
                             <div class="card-body">
                                 <div class="d-grid gap-2">
-                                    <a href="admin/transaksi.php" class="btn btn-primary">
+                                    <a href="transaksi.php" class="btn btn-primary">
                                         <i class="fas fa-plus me-2"></i>Transaksi Baru
                                     </a>
-                                    <a href="admin/member.php" class="btn btn-success">
+                                    <a href="member.php" class="btn btn-success">
                                         <i class="fas fa-user-plus me-2"></i>Tambah Pelanggan
                                     </a>
-                                    <a href="admin/paket.php" class="btn btn-info">
+                                    <a href="paket.php" class="btn btn-info">
                                         <i class="fas fa-box-open me-2"></i>Kelola Paket
                                     </a>
-                                    <a href="admin/cetak_laporan.php" class="btn btn-secondary">
+                                    <a href="cetak_laporan.php" class="btn btn-secondary">
                                         <i class="fas fa-print me-2"></i>Cetak Laporan
                                     </a>
                                 </div>
@@ -231,7 +231,7 @@
                         <div class="card h-100">
                             <div class="card-header d-flex justify-content-between align-items-center">
                                 <h5 class="card-title mb-0">Transaksi Terbaru</h5>
-                                <a href="admin/transaksi.php" class="btn btn-sm btn-primary">
+                                <a href="transaksi.php" class="btn btn-sm btn-primary">
                                     Lihat Semua
                                 </a>
                             </div>

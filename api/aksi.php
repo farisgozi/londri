@@ -3,7 +3,7 @@
 session_start();
  
 // berfungsi menghubungkan koneksi ke database
-include './admin/koneksi.php';
+include 'admin/koneksi.php';
  
 // berfungsi menangkap data yang dikirim
 $user = $_POST['username'];
@@ -26,7 +26,7 @@ if($cek > 0){
         $_SESSION['role'] = "admin";
         $_SESSION['id_outlet'] = $data['id_outlet'];
         //berfungsi mengalihkan ke halaman admin
-        header("location:index_admin.php");
+        header("location:admin/index_admin.php");
     // berfungsi mengecek jika user login sebagai kasir
     }else if($data['role']=="kasir"){
         // berfungsi membuat session

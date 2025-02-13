@@ -25,7 +25,7 @@
                     </div>
                     <ul class="nav flex-column">
                         <li class="nav-item mb-2">
-                            <a href="../index_admin.php" class="nav-link text-white">
+                            <a href="./index_admin.php" class="nav-link text-white">
                                 <i class="fas fa-home me-2"></i> Dashboard
                             </a>
                         </li>

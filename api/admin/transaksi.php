@@ -37,7 +37,7 @@ $default_batas_waktu = date('Y-m-d', strtotime('+3 days'));
                     </div>
                     <ul class="nav flex-column">
                         <li class="nav-item mb-2">
-                            <a href="index_admin.php" class="nav-link text-white">
+                            <a href="./index_admin.php" class="nav-link text-white">
                                 <i class="fas fa-home me-2"></i> Dashboard
                             </a>
                         </li>
@@ -49,6 +49,21 @@ $default_batas_waktu = date('Y-m-d', strtotime('+3 days'));
                         <li class="nav-item mb-2">
                             <a href="member.php" class="nav-link text-white">
                                 <i class="fas fa-users me-2"></i> Pelanggan
+                            </a>
+                        </li>
+                        <li class="nav-item mb-2">
+                            <a href="paket.php" class="nav-link text-white">
+                                <i class="fas fa-box me-2"></i> Paket Laundry
+                            </a>
+                        </li>
+                        <li class="nav-item mb-2">
+                            <a href="outlet.php" class="nav-link text-white">
+                                <i class="fas fa-store me-2"></i> Outlet
+                            </a>
+                        </li>
+                        <li class="nav-item mb-2">
+                            <a href="user.php" class="nav-link text-white">
+                                <i class="fas fa-user-cog me-2"></i> User
                             </a>
                         </li>
                         <li class="nav-item">
