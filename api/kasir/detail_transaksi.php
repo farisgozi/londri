@@ -29,7 +29,6 @@
                                 <i class="fas fa-home me-2"></i> Dashboard
                             </a>
                         </li>
-                        
                         <li class="nav-item mb-2">
                             <a href="transaksi.php" class="nav-link text-white active">
                                 <i class="fas fa-cash-register me-2"></i> Transaksi
