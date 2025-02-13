@@ -1,3 +1,6 @@
+<?php
+include "koneksi.php";
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -91,13 +94,13 @@
                                         <th>Nama Paket</th>
                                         <th>Jenis</th>
                                         <th>Harga</th>
+                                        <th>Outlet</th>
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php
-                                    include "koneksi.php";
-                                    $qry_paket = mysqli_query($conn, "SELECT * FROM paket ORDER BY nama_paket");
+                                    $qry_paket = mysqli_query($conn, "SELECT p.*, o.nama as nama_outlet FROM paket p JOIN outlet o ON p.id_outlet = o.id_outlet ORDER BY p.nama_paket");
                                     $no = 1;
                                     while($data_paket = mysqli_fetch_array($qry_paket)){
                                     ?>
@@ -106,6 +109,7 @@
                                         <td><?php echo $data_paket['nama_paket']; ?></td>
                                         <td><?php echo ucfirst($data_paket['jenis']); ?></td>
                                         <td>Rp <?php echo number_format($data_paket['harga'], 0, ',', '.'); ?></td>
+                                        <td><?php echo $data_paket['nama_outlet']; ?></td>
                                         <td>
                                             <div class="btn-group">
                                                 <button type="button" class="btn btn-sm btn-info" 
@@ -134,6 +138,18 @@
                                                     <form action="proses_ubah_paket.php" method="POST">
                                                         <input type="hidden" name="id_paket" value="<?php echo $data_paket['id_paket']; ?>">
                                                         <div class="mb-3">
+                                                            <label class="form-label">Outlet</label>
+                                                            <select name="id_outlet" class="form-select" required>
+                                                                <?php
+                                                                $qry_outlet = mysqli_query($conn, "SELECT * FROM outlet ORDER BY nama");
+                                                                while($outlet = mysqli_fetch_array($qry_outlet)){
+                                                                    $selected = ($outlet['id_outlet'] == $data_paket['id_outlet']) ? 'selected' : '';
+                                                                    echo "<option value='".$outlet['id_outlet']."' ".$selected.">".$outlet['nama']."</option>";
+                                                                }
+                                                                ?>
+                                                            </select>
+                                                        </div>
+                                                        <div class="mb-3">
                                                             <label class="form-label">Nama Paket</label>
                                                             <input type="text" name="nama_paket" class="form-control" 
                                                                    value="<?php echo $data_paket['nama_paket']; ?>" required>
@@ -145,6 +161,7 @@
                                                                 <option value="selimut" <?php if($data_paket['jenis']=='selimut') echo 'selected'; ?>>Selimut</option>
                                                                 <option value="bed_cover" <?php if($data_paket['jenis']=='bed_cover') echo 'selected'; ?>>Bed Cover</option>
                                                                 <option value="kaos" <?php if($data_paket['jenis']=='kaos') echo 'selected'; ?>>Kaos</option>
+                                                                <option value="lain" <?php if($data_paket['jenis']=='lain') echo 'selected'; ?>>Lainnya</option>
                                                             </select>
                                                         </div>
                                                         <div class="mb-3">
@@ -182,6 +199,18 @@
                 <div class="modal-body">
                     <form action="proses_tambah_paket.php" method="POST">
                         <div class="mb-3">
+                            <label class="form-label">Outlet</label>
+                            <select name="id_outlet" class="form-select" required>
+                                <option value="">Pilih Outlet</option>
+                                <?php
+                                $qry_outlet = mysqli_query($conn, "SELECT * FROM outlet ORDER BY nama");
+                                while($outlet = mysqli_fetch_array($qry_outlet)){
+                                    echo "<option value='".$outlet['id_outlet']."'>".$outlet['nama']."</option>";
+                                }
+                                ?>
+                            </select>
+                        </div>
+                        <div class="mb-3">
                             <label class="form-label">Nama Paket</label>
                             <input type="text" name="nama_paket" class="form-control" required>
                         </div>
@@ -193,6 +222,7 @@
                                 <option value="selimut">Selimut</option>
                                 <option value="bed_cover">Bed Cover</option>
                                 <option value="kaos">Kaos</option>
+                                <option value="lain">Lainnya</option>
                             </select>
                         </div>
                         <div class="mb-3">
