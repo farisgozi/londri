@@ -7,7 +7,7 @@ if($_POST){
 
     // Validate jenis_kelamin enum
     if(!in_array($jenis_kelamin, ['Laki-laki', 'Perempuan'])) {
-        echo "<script>alert('Jenis kelamin harus Laki-laki atau Perempuan');location.href='member.php';</script>";
+        echo "<script>alert('Jenis kelamin harus Laki-laki atau Perempuan');location.href='.member.php';</script>";
         exit;
     }
 
