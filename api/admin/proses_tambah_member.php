@@ -13,7 +13,7 @@ if($_POST){
 
     // Validate phone number length
     if(strlen($tlp) > 15) {
-        echo "<script>alert('Nomor telepon maksimal 15 digit');location.href='member.php';</script>";
+        echo "<script>alert('Nomor telepon maksimal 15 digit');location.href='./member.php';</script>";
         exit;
     }
 
