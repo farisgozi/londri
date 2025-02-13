@@ -7,7 +7,7 @@ if($_POST){
 
     // Validate jenis_kelamin enum
     if(!in_array($jenis_kelamin, ['Laki-laki', 'Perempuan'])) {
-        echo "<script>alert('Jenis kelamin harus Laki-laki atau Perempuan');location.href='.member.php';</script>";
+        echo "<script>alert('Jenis kelamin harus Laki-laki atau Perempuan');location.href='./member.php';</script>";
         exit;
     }
 
@@ -20,7 +20,7 @@ if($_POST){
     if(empty($nama_member)){
         echo "<script>alert('Nama member tidak boleh kosong');location.href='member.php';</script>";
     } elseif(empty($tlp)){
-        echo "<script>alert('No Telp tidak boleh kosong');location.href='member.php';</script>";
+        echo "<script>alert('No Telp tidak boleh kosong');location.href='./member.php';</script>";
     } else {
         include "koneksi.php";
         $insert = mysqli_query($conn, "INSERT INTO member (nama_member, alamat, jenis_kelamin, tlp) 
