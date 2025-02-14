@@ -390,7 +390,7 @@ License: For each use you must have a valid license purchased only from above li
                                                 <div class="form-group row" style="text-align: left;">
                                                     <div class="col-lg-8 ml-auto">
                                                         <button type="submit" class="btn btn-primary">Submit</button>
-                                                        <a href="./admin/member.php"><button type="button" class="btn btn-secondary">Kembali</button></a>
+                                                        <a href="member.php"><button type="button" class="btn btn-secondary">Kembali</button></a>
                                             </form>
 										</div>
 										<!--end::Wrapper-->
