@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Dashboard Admin | LaundryApp</title>
+    <title>Dashboard Admin | Laundries</title>
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <link href="../css/custom.css" rel="stylesheet">
     <link href="../assets/plugins/fontawesome/css/all.min.css" rel="stylesheet">
@@ -15,7 +15,7 @@
             <div class="p-4">
                 <div class="text-center mb-4">
                     <img src="../logos.webp" alt="Logo" class="img-fluid mb-3" style="max-height: 60px;">
-                    <h5 class="mb-0">LaundryApp</h5>
+                    <h5 class="mb-0">Laundries</h5>
                 </div>
 
                 <!-- Navigation Menu -->
@@ -90,7 +90,7 @@
                             <div class="card-body p-4">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div>
-                                        <h4 class="mb-1">Selamat Datang di LaundryApp</h4>
+                                        <h4 class="mb-1">Selamat Datang di Laundries</h4>
                                         <p class="mb-0">Kelola bisnis laundry Anda dengan mudah dan efisien</p>
                                     </div>
                                     <i class="fas fa-tshirt fa-3x opacity-50"></i>
