@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Detail Transaksi | LaundryApp</title>
+    <title>Detail Transaksi | Laundriesp</title>
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <link href="../css/custom.css" rel="stylesheet">
     <link href="../assets/plugins/fontawesome/css/all.min.css" rel="stylesheet">
@@ -14,8 +14,8 @@
         <div class="bg-dark text-white" style="width: 280px; min-height: 100vh;">
             <div class="p-4">
                 <div class="text-center mb-4">
-                    <img src="laundry.PNG" alt="Logo" class="img-fluid mb-3" style="max-height: 60px;">
-                    <h5 class="mb-0">LaundryApp</h5>
+                    <img src="./logos.webp" alt="Logo" class="img-fluid mb-3" style="max-height: 60px;">
+                    <h5 class="mb-0">Laundries</h5>
                 </div>
 
                 <!-- Navigation Menu -->
