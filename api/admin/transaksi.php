@@ -242,6 +242,14 @@ $default_batas_waktu = date('Y-m-d', strtotime('+3 days'));
                                 <label class="form-label">Jumlah (Qty)</label>
                                 <input type="number" name="qty" class="form-control" value="1" min="1" required>
                             </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Diskon (%)</label>
+                                <input type="number" name="diskon" class="form-control" value="0" min="0" max="100" step="0.01">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Pajak (%)</label>
+                                <input type="number" name="pajak" class="form-control" value="0" min="0" max="100" step="0.01">
+                            </div>
                             <div class="col-md-12">
                                 <label class="form-label">Keterangan</label>
                                 <textarea name="keterangan" class="form-control" rows="2" placeholder="Catatan tambahan (opsional)"></textarea>
