@@ -19,7 +19,6 @@ $default_batas_waktu = date('Y-m-d', strtotime('+3 days'));
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <link href="../css/custom.css" rel="stylesheet">
     <link href="../assets/plugins/fontawesome/css/all.min.css" rel="stylesheet">
-</head>
 <body>
     <div class="d-flex">
         <!-- Sidebar -->
@@ -33,11 +32,11 @@ $default_batas_waktu = date('Y-m-d', strtotime('+3 days'));
                 <!-- Navigation Menu -->
                 <nav class="mt-4">
                     <div class="mb-3">
-                        <small class="text-muted text-uppercase">Menu Kasir</small>
+                        <small class="text-muted text-uppercase">Menu Admin</small>
                     </div>
                     <ul class="nav flex-column">
                         <li class="nav-item mb-2">
-                            <a href="index_kasir.php" class="nav-link text-white">
+                            <a href="./index_admin.php" class="nav-link text-white">
                                 <i class="fas fa-home me-2"></i> Dashboard
                             </a>
                         </li>
@@ -49,6 +48,21 @@ $default_batas_waktu = date('Y-m-d', strtotime('+3 days'));
                         <li class="nav-item mb-2">
                             <a href="member.php" class="nav-link text-white">
                                 <i class="fas fa-users me-2"></i> Pelanggan
+                            </a>
+                        </li>
+                        <li class="nav-item mb-2">
+                            <a href="paket.php" class="nav-link text-white">
+                                <i class="fas fa-box me-2"></i> Paket Laundry
+                            </a>
+                        </li>
+                        <li class="nav-item mb-2">
+                            <a href="outlet.php" class="nav-link text-white">
+                                <i class="fas fa-store me-2"></i> Outlet
+                            </a>
+                        </li>
+                        <li class="nav-item mb-2">
+                            <a href="user.php" class="nav-link text-white">
+                                <i class="fas fa-user-cog me-2"></i> User
                             </a>
                         </li>
                         <li class="nav-item">
@@ -93,19 +107,28 @@ $default_batas_waktu = date('Y-m-d', strtotime('+3 days'));
                                         <th>Paket</th>
                                         <th>Harga/Kg</th>
                                         <th>Subtotal</th>
+                                        <th>Diskon</th>
+                                        <th>Pajak</th>
+                                        <th>Total</th>
                                         <th>Status Order</th>
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php
-                                    $qry_transaksi = mysqli_query($conn, "SELECT t.*, o.nama as outlet_nama, m.nama_member, p.nama_paket, p.harga, dt.qty
-                                                                        FROM transaksi t 
-                                                                        JOIN outlet o ON t.id_outlet = o.id_outlet 
-                                                                        JOIN member m ON t.id_member = m.id_member 
-                                                                        JOIN paket p ON t.id_paket = p.id_paket 
+                                    $qry_transaksi = mysqli_query($conn, "SELECT t.*, o.nama as outlet_nama, m.nama_member, p.nama_paket, p.harga, dt.qty,
+                                                                        COALESCE(t.diskon, 0) as diskon,
+                                                                        COALESCE(t.pajak, 0) as pajak
+                                                                        FROM transaksi t
+                                                                        JOIN outlet o ON t.id_outlet = o.id_outlet
+                                                                        JOIN member m ON t.id_member = m.id_member
+                                                                        JOIN paket p ON t.id_paket = p.id_paket
                                                                         LEFT JOIN detail_transaksi dt ON t.id_transaksi = dt.id_transaksi
                                                                         ORDER BY t.tgl DESC");
+                                    
+                                    if (!$qry_transaksi) {
+                                        echo "Error: " . mysqli_error($conn);
+                                    }
                                     $no = 1;
                                     while($data = mysqli_fetch_array($qry_transaksi)){
                                     ?>
@@ -122,7 +145,17 @@ $default_batas_waktu = date('Y-m-d', strtotime('+3 days'));
                                         <td><?php echo $data['nama_member']; ?></td>
                                         <td><?php echo $data['nama_paket']; ?> (<?php echo $data['qty']; ?> pcs)</td>
                                         <td>Rp <?php echo number_format($data['harga'], 0, ',', '.'); ?></td>
-                                        <td>Rp <?php echo number_format($data['harga'] * $data['qty'], 0, ',', '.'); ?></td>
+                                        <?php
+                                        $subtotal = $data['harga'] * $data['qty'];
+                                        $diskon_amount = $subtotal * ($data['diskon'] / 100);
+                                        $after_diskon = $subtotal - $diskon_amount;
+                                        $pajak_amount = $after_diskon * ($data['pajak'] / 100);
+                                        $total = $after_diskon + $pajak_amount;
+                                        ?>
+                                        <td>Rp <?php echo number_format($subtotal, 0, ',', '.'); ?></td>
+                                        <td><?php echo $data['diskon']; ?>% (Rp <?php echo number_format($diskon_amount, 0, ',', '.'); ?>)</td>
+                                        <td><?php echo $data['pajak']; ?>% (Rp <?php echo number_format($pajak_amount, 0, ',', '.'); ?>)</td>
+                                        <td>Rp <?php echo number_format($total, 0, ',', '.'); ?></td>
                                         <td>
                                             <?php
                                             $status_class = '';
@@ -227,6 +260,14 @@ $default_batas_waktu = date('Y-m-d', strtotime('+3 days'));
                             <div class="col-md-6">
                                 <label class="form-label">Jumlah (Qty)</label>
                                 <input type="number" name="qty" class="form-control" value="1" min="1" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Diskon (%)</label>
+                                <input type="number" name="diskon" class="form-control" value="0" min="0" max="100" step="0.01">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Pajak (%)</label>
+                                <input type="number" name="pajak" class="form-control" value="0" min="0" max="100" step="0.01">
                             </div>
                             <div class="col-md-12">
                                 <label class="form-label">Keterangan</label>
