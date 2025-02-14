@@ -9,7 +9,7 @@ include "koneksi.php";
     <title>User | LaundryApp</title>
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <link href="../css/custom.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <link href="../assets/plugins/fontawesome/css/all.min.css" rel="stylesheet">
 </head>
 <body>
     <div class="d-flex">
