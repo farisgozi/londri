@@ -342,7 +342,7 @@ License: For each use you must have a valid license purchased only from above li
 											<!--begin::Top-->
 											    <div class="text-center mb-15">
 												<!--begin::Text-->
-                                                <form action="./admin/proses_ubah_member.php" method="post">
+                                                <form action="proses_ubah_member.php" method="post">
 										
                                                 <?php 
                                                     include "koneksi.php";
