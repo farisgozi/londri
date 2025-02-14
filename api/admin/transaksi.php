@@ -107,28 +107,19 @@ $default_batas_waktu = date('Y-m-d', strtotime('+3 days'));
                                         <th>Paket</th>
                                         <th>Harga/Kg</th>
                                         <th>Subtotal</th>
-                                        <th>Diskon</th>
-                                        <th>Pajak</th>
-                                        <th>Total</th>
                                         <th>Status Order</th>
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php
-                                    $qry_transaksi = mysqli_query($conn, "SELECT t.*, o.nama as outlet_nama, m.nama_member, p.nama_paket, p.harga, dt.qty,
-                                                                        COALESCE(t.diskon, 0) as diskon,
-                                                                        COALESCE(t.pajak, 0) as pajak
-                                                                        FROM transaksi t
-                                                                        JOIN outlet o ON t.id_outlet = o.id_outlet
-                                                                        JOIN member m ON t.id_member = m.id_member
-                                                                        JOIN paket p ON t.id_paket = p.id_paket
+                                    $qry_transaksi = mysqli_query($conn, "SELECT t.*, o.nama as outlet_nama, m.nama_member, p.nama_paket, p.harga, dt.qty
+                                                                        FROM transaksi t 
+                                                                        JOIN outlet o ON t.id_outlet = o.id_outlet 
+                                                                        JOIN member m ON t.id_member = m.id_member 
+                                                                        JOIN paket p ON t.id_paket = p.id_paket 
                                                                         LEFT JOIN detail_transaksi dt ON t.id_transaksi = dt.id_transaksi
                                                                         ORDER BY t.tgl DESC");
-                                    
-                                    if (!$qry_transaksi) {
-                                        echo "Error: " . mysqli_error($conn);
-                                    }
                                     $no = 1;
                                     while($data = mysqli_fetch_array($qry_transaksi)){
                                     ?>
@@ -145,17 +136,7 @@ $default_batas_waktu = date('Y-m-d', strtotime('+3 days'));
                                         <td><?php echo $data['nama_member']; ?></td>
                                         <td><?php echo $data['nama_paket']; ?> (<?php echo $data['qty']; ?> pcs)</td>
                                         <td>Rp <?php echo number_format($data['harga'], 0, ',', '.'); ?></td>
-                                        <?php
-                                        $subtotal = $data['harga'] * $data['qty'];
-                                        $diskon_amount = $subtotal * ($data['diskon'] / 100);
-                                        $after_diskon = $subtotal - $diskon_amount;
-                                        $pajak_amount = $after_diskon * ($data['pajak'] / 100);
-                                        $total = $after_diskon + $pajak_amount;
-                                        ?>
-                                        <td>Rp <?php echo number_format($subtotal, 0, ',', '.'); ?></td>
-                                        <td><?php echo $data['diskon']; ?>% (Rp <?php echo number_format($diskon_amount, 0, ',', '.'); ?>)</td>
-                                        <td><?php echo $data['pajak']; ?>% (Rp <?php echo number_format($pajak_amount, 0, ',', '.'); ?>)</td>
-                                        <td>Rp <?php echo number_format($total, 0, ',', '.'); ?></td>
+                                        <td>Rp <?php echo number_format($data['harga'] * $data['qty'], 0, ',', '.'); ?></td>
                                         <td>
                                             <?php
                                             $status_class = '';
