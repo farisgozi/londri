@@ -373,10 +373,13 @@ License: For each use you must have a valid license purchased only from above li
                                                     </div>
                                                 </div>
                                                 <div class="mb-3" style="text-align: left;">
-                                                <strong><label class="col-lg-4 col-form-label" for="val-password">Jenis Kelamin<span class="text-danger">*</span>
+                                                <strong><label class="col-lg-4 col-form-label" for="val-gender">Jenis Kelamin<span class="text-danger">*</span>
                                                     </label></strong>
                                                     <div class="col-lg-12">
-                                                        <input type="text" class="form-control" id="val-password" name="jenis_kelamin" placeholder="Enter the jurusan..." value="<?= $data['jenis_kelamin']?>">
+                                                        <select class="form-control" id="val-gender" name="jenis_kelamin">
+                                                            <option value="Laki-laki" <?= ($data['jenis_kelamin'] == 'Laki-laki') ? 'selected' : '' ?>>Laki-laki</option>
+                                                            <option value="Perempuan" <?= ($data['jenis_kelamin'] == 'Perempuan') ? 'selected' : '' ?>>Perempuan</option>
+                                                        </select>
                                                     </div>
                                                 </div>
                                                 <div class="mb-3" style="text-align: left;">
