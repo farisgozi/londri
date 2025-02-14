@@ -15,7 +15,7 @@
                     <div class="card-body p-4">
                         <!-- Logo -->
                         <div class="text-center mb-4">
-                            <img src="admin/laundry.PNG" alt="Logo" class="img-fluid mb-3" style="max-height: 100px;">
+                            <img src="./logos.webp" alt="Logo" class="img-fluid mb-3" style="max-height: 100px;">
                             <h4 class="text-dark mb-2">Selamat Datang</h4>
                             <p class="text-muted">Silahkan login untuk melanjutkan</p>
                         </div>
