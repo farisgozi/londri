@@ -107,6 +107,9 @@ $default_batas_waktu = date('Y-m-d', strtotime('+3 days'));
                                         <th>Paket</th>
                                         <th>Harga/Kg</th>
                                         <th>Subtotal</th>
+                                        <th>Diskon</th>
+                                        <th>Pajak</th>
+                                        <th>Total</th>
                                         <th>Status Order</th>
                                         <th>Aksi</th>
                                     </tr>
@@ -136,7 +139,17 @@ $default_batas_waktu = date('Y-m-d', strtotime('+3 days'));
                                         <td><?php echo $data['nama_member']; ?></td>
                                         <td><?php echo $data['nama_paket']; ?> (<?php echo $data['qty']; ?> pcs)</td>
                                         <td>Rp <?php echo number_format($data['harga'], 0, ',', '.'); ?></td>
-                                        <td>Rp <?php echo number_format($data['harga'] * $data['qty'], 0, ',', '.'); ?></td>
+                                        <?php
+                                        $subtotal = $data['harga'] * $data['qty'];
+                                        $diskon_amount = $subtotal * ($data['diskon'] / 100);
+                                        $after_diskon = $subtotal - $diskon_amount;
+                                        $pajak_amount = $after_diskon * ($data['pajak'] / 100);
+                                        $total = $after_diskon + $pajak_amount;
+                                        ?>
+                                        <td>Rp <?php echo number_format($subtotal, 0, ',', '.'); ?></td>
+                                        <td><?php echo $data['diskon']; ?>% (Rp <?php echo number_format($diskon_amount, 0, ',', '.'); ?>)</td>
+                                        <td><?php echo $data['pajak']; ?>% (Rp <?php echo number_format($pajak_amount, 0, ',', '.'); ?>)</td>
+                                        <td>Rp <?php echo number_format($total, 0, ',', '.'); ?></td>
                                         <td>
                                             <?php
                                             $status_class = '';
