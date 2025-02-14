@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Cetak Laporan Transaksi | LaundryApp</title>
+    <title>Cetak Laporan Transaksi | Laundries</title>
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <style type="text/css">
         @page {
