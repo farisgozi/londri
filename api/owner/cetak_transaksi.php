@@ -184,7 +184,7 @@
     <div class="page">
         <div class="container">
             <div class="header-section">
-                <img src="laundry.PNG" alt="Logo" class="logo">
+                <img src="./logos.webp" alt="Logo" class="logo">
                 <div class="company-name">Family Laundry</div>
                 <div class="report-title">Laporan Transaksi Laundry</div>
                 <div>Email: familylaundry@gmail.com</div>
