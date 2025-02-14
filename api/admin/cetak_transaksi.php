@@ -57,7 +57,7 @@ p {
     line-height: 20px;
 }
  </style>
-<img src="laundry.png">
+<img src="../logos.webp">
 <h2 class="align-center">LAPORAN TRANSAKSI LAUNDRY</h2>
 <h3>Family Laundry</h3>
  <p class="header">Email: familylaundry@gmail.com</p>
