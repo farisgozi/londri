@@ -20,7 +20,7 @@ $default_batas_waktu = date('Y-m-d', strtotime('+3 days'));
     <link href="../css/custom.css" rel="stylesheet">
     <link href="../assets/plugins/fontawesome/css/all.min.css" rel="stylesheet">
 <body>
-    <div class="d-flex">
+    <div class="d-flex">>
         <!-- Sidebar -->
         <div class="bg-dark text-white" style="width: 280px; min-height: 100vh;">
             <div class="p-4">
