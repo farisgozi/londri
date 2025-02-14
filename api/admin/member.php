@@ -21,7 +21,7 @@
                 <!-- Navigation Menu -->
                 <nav class="mt-4">
                     <div class="mb-3">
-                        <small class="text-muted text-uppercase">Menu Admin</small>
+                        <small class="text-muted text-uppercase">Menu Kasir</small>
                     </div>
                     <ul class="nav flex-column">
                         <li class="nav-item mb-2">
@@ -106,7 +106,7 @@
                                         <td><?php echo $no++; ?></td>
                                         <td><?php echo $data_member['nama_member']; ?></td>
                                         <td><?php echo $data_member['alamat']; ?></td>
-                                        <td><?php echo $data_member['jenis_kelamin'] == 'L' ? 'Laki-laki' : 'Perempuan'; ?></td>
+                                        <td><?php echo $data_member['jenis_kelamin']; ?></td>
                                         <td><?php echo $data_member['tlp']; ?></td>
                                         <td>
                                             <div class="btn-group">
@@ -147,8 +147,8 @@
                                                         <div class="mb-3">
                                                             <label class="form-label">Jenis Kelamin</label>
                                                             <select name="jenis_kelamin" class="form-select" required>
-                                                                <option value="L" <?php if($data_member['jenis_kelamin']=='L') echo 'selected'; ?>>Laki-laki</option>
-                                                                <option value="P" <?php if($data_member['jenis_kelamin']=='P') echo 'selected'; ?>>Perempuan</option>
+                                                                <option value="Laki-laki" <?php if($data_member['jenis_kelamin']=='Laki-laki') echo 'selected'; ?>>Laki-laki</option>
+                                                                <option value="Perempuan" <?php if($data_member['jenis_kelamin']=='Perempuan') echo 'selected'; ?>>Perempuan</option>
                                                             </select>
                                                         </div>
                                                         <div class="mb-3">
@@ -197,8 +197,8 @@
                             <label class="form-label">Jenis Kelamin</label>
                             <select name="jenis_kelamin" class="form-select" required>
                                 <option value="">Pilih Jenis Kelamin</option>
-                                <option value="L">Laki-laki</option>
-                                <option value="P">Perempuan</option>
+                                <option value="Laki-laki">Laki-laki</option>
+                                <option value="Perempuan">Perempuan</option>
                             </select>
                         </div>
                         <div class="mb-3">
