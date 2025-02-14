@@ -51,8 +51,8 @@ $top_outlets = mysqli_query($conn, "SELECT
     <title>Dashboard Owner | LaundryApp</title>
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <link href="../css/custom.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="../assets/plugins/fontawesome/css/all.min.css" rel="stylesheet">
+    <script src="../assets/plugins/chartjs/chart.js"></script>
 </head>
 <body>
     <div class="d-flex">

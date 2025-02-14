@@ -1,20 +1,7 @@
--- Update transaksi table to handle zero dates
-SET SQL_MODE = '';
-SET SESSION sql_mode = '';
+-- Add discount and tax columns to transaksi table
+ALTER TABLE transaksi
+ADD COLUMN diskon DECIMAL(5,2) DEFAULT 0.00,
+ADD COLUMN pajak DECIMAL(5,2) DEFAULT 0.00;
 
--- Modify tgl_bayar column to allow zero dates
-ALTER TABLE transaksi MODIFY COLUMN tgl_bayar date DEFAULT NULL;
-
--- Add trigger to handle tgl_bayar
-DELIMITER //
-CREATE TRIGGER before_insert_transaksi
-BEFORE INSERT ON transaksi
-FOR EACH ROW
-BEGIN
-    IF NEW.dibayar = 'dibayar' THEN
-        SET NEW.tgl_bayar = CURRENT_DATE;
-    ELSE
-        SET NEW.tgl_bayar = NULL;
-    END IF;
-END//
-DELIMITER ;
+-- Update existing records to have 0 discount and tax
+UPDATE transaksi SET diskon = 0.00, pajak = 0.00 WHERE diskon IS NULL;
