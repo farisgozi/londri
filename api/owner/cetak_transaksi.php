@@ -185,9 +185,9 @@
         <div class="container">
             <div class="header-section">
                 <img src="../logos.webp" alt="Logo" class="logo">
-                <div class="company-name">Family Laundry</div>
+                <div class="company-name">Launnres</div>
                 <div class="report-title">Laporan Transaksi Laundry</div>
-                <div>Email: familylaundry@gmail.com</div>
+                <div>Email: launnreslaundry@gmail.com</div>
             </div>
 
             <div class="date-section">
