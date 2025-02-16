@@ -59,7 +59,7 @@
                 
                 <!-- Footer -->
                 <div class="text-center mt-4">
-                    <p class="text-muted">Launners &copy; 2025</p>
+                    <p class="text-muted">Launnres &copy; 2025</p>
                 </div>
             </div>
         </div>
