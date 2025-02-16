@@ -35,7 +35,7 @@
                             </a>
                         </li>
                         <li class="nav-item mb-2">
-                            <a href="member.php" class="nav-link text-white">
+                            <a href="member.php" class="nav-link text-white active">
                                 <i class="fas fa-users me-2"></i> Pelanggan
                             </a>
                         </li>
@@ -45,7 +45,7 @@
                             </a>
                         </li>
                         <li class="nav-item mb-2">
-                            <a href="outlet.php" class="nav-link text-white active">
+                            <a href="outlet.php" class="nav-link text-white">
                                 <i class="fas fa-store me-2"></i> Outlet
                             </a>
                         </li>
