@@ -59,7 +59,7 @@ p {
  </style>
 <img src="../logos.webp">
 <h2 class="align-center">LAPORAN TRANSAKSI LAUNDRY</h2>
-<h3>Family Laundry</h3>
+<h3>Launnres</h3>
  <p class="header">Email: familylaundry@gmail.com</p>
  <br><hr style="width:100%", size="3", color=black><hr>
 
