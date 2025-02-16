@@ -15,7 +15,7 @@
             <div class="p-4">
                 <div class="text-center mb-4">
                     <img src="../logos.webp" alt="Logo" class="img-fluid mb-3" style="max-height: 60px;">
-                    <h5 class="mb-0">Launners</h5>
+                    <h5 class="mb-0">Launnres</h5>
                 </div>
 
                 <!-- Navigation Menu -->
@@ -90,7 +90,7 @@
                             <div class="card-body p-4">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div>
-                                        <h4 class="mb-1">Selamat Datang di Launners</h4>
+                                        <h4 class="mb-1">Selamat Datang di Launnres</h4>
                                         <p class="mb-0">Kelola bisnis laundry Anda dengan mudah dan efisien</p>
                                     </div>
                                     <i class="fas fa-tshirt fa-3x opacity-50"></i>
