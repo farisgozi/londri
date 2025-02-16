@@ -90,7 +90,7 @@
                             <div class="card-body p-4">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div>
-                                        <h4 class="mb-1">Selamat Datang di Laundries</h4>
+                                        <h4 class="mb-1">Selamat Datang di Launners</h4>
                                         <p class="mb-0">Kelola bisnis laundry Anda dengan mudah dan efisien</p>
                                     </div>
                                     <i class="fas fa-tshirt fa-3x opacity-50"></i>
