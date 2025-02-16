@@ -318,7 +318,7 @@
     <div class="page">
         <div class="container">
             <div class="header-section">
-                <div class="company-name">Family Laundry</div>
+                <div class="company-name">Launnres</div>
                 <div class="report-title">Syarat dan Ketentuan</div>
             </div>
 
