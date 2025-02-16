@@ -30,7 +30,7 @@
                             </a>
                         </li>
                         <li class="nav-item mb-2">
-                            <a href="transaksi.php" class="nav-link text-white">
+                            <a href="transaksi.php" class="nav-link text-white active">
                                 <i class="fas fa-cash-register me-2"></i> Transaksi
                             </a>
                         </li>
@@ -40,7 +40,7 @@
                             </a>
                         </li>
                         <li class="nav-item mb-2">
-                            <a href="paket.php" class="nav-link text-white active">
+                            <a href="paket.php" class="nav-link text-white">
                                 <i class="fas fa-box me-2"></i> Paket Laundry
                             </a>
                         </li>
