@@ -15,7 +15,7 @@ $default_batas_waktu = date('Y-m-d', strtotime('+3 days'));
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Transaksi | Laundries</title>
+    <title>Transaksi | Launners</title>
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <link href="../css/custom.css" rel="stylesheet">
     <link href="../assets/plugins/fontawesome/css/all.min.css" rel="stylesheet">
