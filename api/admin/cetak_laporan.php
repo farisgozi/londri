@@ -108,7 +108,7 @@
     <div class="header">
         <img src="../logos.webp" alt="Logo" class="logo">
         <h1 class="company-name">LAPORAN TRANSAKSI LAUNDRY</h1>
-        <p class="company-info">Family Laundry</p>
+        <p class="company-info">Launnres</p>
         <p class="company-info">Email: familylaundry@gmail.com</p>
     </div>
 
