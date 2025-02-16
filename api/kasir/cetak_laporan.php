@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Cetak Laporan Transaksi | Launners</title>
+    <title>Cetak Laporan Transaksi | Launnres</title>
     <style type="text/css">
         body {
             font-family: Arial, sans-serif;
