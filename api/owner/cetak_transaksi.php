@@ -14,6 +14,23 @@ $result = mysqli_query($conn, "
 ");
 $total_revenue = mysqli_fetch_assoc($result)['total_revenue'] ?? 0;
 
+// Get monthly revenue data
+$monthly_revenue = mysqli_query($conn, "
+    SELECT 
+        DATE_FORMAT(t.tgl, '%Y-%m') as month,
+        DATE_FORMAT(t.tgl, '%M %Y') as month_name,
+        SUM(
+            (p.harga * dt.qty) * (1 - COALESCE(t.diskon, 0)/100) * (1 + COALESCE(t.pajak, 0)/100)
+        ) as revenue,
+        COUNT(*) as transaction_count
+    FROM transaksi t 
+    JOIN paket p ON t.id_paket = p.id_paket 
+    JOIN detail_transaksi dt ON t.id_transaksi = dt.id_transaksi
+    WHERE t.dibayar = 'dibayar'
+    GROUP BY DATE_FORMAT(t.tgl, '%Y-%m'), DATE_FORMAT(t.tgl, '%M %Y')
+    ORDER BY month DESC
+");
+
 $result = mysqli_query($conn, "SELECT COUNT(*) as total FROM transaksi");
 $total_transactions = mysqli_fetch_assoc($result)['total'];
 
@@ -218,6 +235,26 @@ $outlet_revenue = mysqli_query($conn, "
                         <div class="value"><?= number_format($total_transactions) ?></div>
                     </div>
                 </div>
+
+                <div class="summary-title">Pendapatan Bulanan</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Bulan</th>
+                            <th>Jumlah Transaksi</th>
+                            <th>Total Pendapatan</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php while($row = mysqli_fetch_assoc($monthly_revenue)) { ?>
+                        <tr>
+                            <td><?= $row['month_name'] ?></td>
+                            <td><?= number_format($row['transaction_count']) ?></td>
+                            <td>Rp <?= number_format($row['revenue'], 0, ',', '.') ?></td>
+                        </tr>
+                        <?php } ?>
+                    </tbody>
+                </table>
 
                 <div class="summary-title">Status Transaksi</div>
                 <div class="status-grid">
