@@ -5,8 +5,16 @@ include "koneksi.php";
 $result = mysqli_query($conn, "SELECT COUNT(*) as total FROM transaksi");
 $total_transaksi = mysqli_fetch_assoc($result)['total'];
 
-// Get total revenue
-$result = mysqli_query($conn, "SELECT SUM(p.harga) as total FROM transaksi t JOIN paket p ON t.id_paket = p.id_paket WHERE t.dibayar = 'dibayar'");
+// Get total revenue with correct calculation including qty, discount, and tax
+$result = mysqli_query($conn, "
+    SELECT SUM(
+        (p.harga * dt.qty) * (1 - COALESCE(t.diskon, 0)/100) * (1 + COALESCE(t.pajak, 0)/100)
+    ) as total 
+    FROM transaksi t 
+    JOIN paket p ON t.id_paket = p.id_paket 
+    JOIN detail_transaksi dt ON t.id_transaksi = dt.id_transaksi
+    WHERE t.dibayar = 'dibayar'
+");
 $total_revenue = mysqli_fetch_assoc($result)['total'];
 
 // Get total customers
@@ -17,31 +25,41 @@ $total_customers = mysqli_fetch_assoc($result)['total'];
 $result = mysqli_query($conn, "SELECT COUNT(*) as total FROM outlet");
 $total_outlets = mysqli_fetch_assoc($result)['total'];
 
-// Get monthly revenue data
-$monthly_revenue = mysqli_query($conn, "SELECT 
+// Get monthly revenue data with correct calculation
+$monthly_revenue = mysqli_query($conn, "
+    SELECT 
     DATE_FORMAT(t.tgl, '%Y-%m') as month,
-    SUM(p.harga) as revenue
+    SUM(
+        (p.harga * dt.qty) * (1 - COALESCE(t.diskon, 0)/100) * (1 + COALESCE(t.pajak, 0)/100)
+    ) as revenue
     FROM transaksi t 
     JOIN paket p ON t.id_paket = p.id_paket 
+    JOIN detail_transaksi dt ON t.id_transaksi = dt.id_transaksi
     WHERE t.dibayar = 'dibayar'
     GROUP BY DATE_FORMAT(t.tgl, '%Y-%m')
     ORDER BY month DESC
-    LIMIT 6");
+    LIMIT 6
+");
 
 // Get transaction status distribution
 $status_dist = mysqli_query($conn, "SELECT status, COUNT(*) as count FROM transaksi GROUP BY status");
 
-// Get top performing outlets
-$top_outlets = mysqli_query($conn, "SELECT 
+// Get top performing outlets with correct revenue calculation
+$top_outlets = mysqli_query($conn, "
+    SELECT 
     o.nama as outlet_name,
     COUNT(*) as transaction_count,
-    SUM(p.harga) as revenue
+    SUM(
+        (p.harga * dt.qty) * (1 - COALESCE(t.diskon, 0)/100) * (1 + COALESCE(t.pajak, 0)/100)
+    ) as revenue
     FROM transaksi t 
     JOIN outlet o ON t.id_outlet = o.id_outlet
     JOIN paket p ON t.id_paket = p.id_paket
+    JOIN detail_transaksi dt ON t.id_transaksi = dt.id_transaksi
     WHERE t.dibayar = 'dibayar'
     GROUP BY o.id_outlet
-    ORDER BY revenue DESC");
+    ORDER BY revenue DESC
+");
 ?>
 <!DOCTYPE html>
 <html lang="en">
