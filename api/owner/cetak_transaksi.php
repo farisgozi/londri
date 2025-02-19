@@ -1,3 +1,52 @@
+<?php
+// Move PHP code to top for better organization
+include "koneksi.php";
+
+// Calculate summary statistics with correct revenue calculation
+$result = mysqli_query($conn, "
+    SELECT SUM(
+        (p.harga * dt.qty) * (1 - COALESCE(t.diskon, 0)/100) * (1 + COALESCE(t.pajak, 0)/100)
+    ) as total_revenue 
+    FROM transaksi t 
+    JOIN paket p ON t.id_paket = p.id_paket 
+    JOIN detail_transaksi dt ON t.id_transaksi = dt.id_transaksi
+    WHERE t.dibayar = 'dibayar'
+");
+$total_revenue = mysqli_fetch_assoc($result)['total_revenue'] ?? 0;
+
+$result = mysqli_query($conn, "SELECT COUNT(*) as total FROM transaksi");
+$total_transactions = mysqli_fetch_assoc($result)['total'];
+
+$status_dist = mysqli_query($conn, "SELECT status, COUNT(*) as count 
+                                   FROM transaksi 
+                                   GROUP BY status");
+$status_counts = [];
+while($row = mysqli_fetch_assoc($status_dist)) {
+    $status_counts[$row['status']] = $row['count'];
+}
+
+$payment_dist = mysqli_query($conn, "SELECT dibayar, COUNT(*) as count 
+                                    FROM transaksi 
+                                    GROUP BY dibayar");
+$payment_counts = [];
+while($row = mysqli_fetch_assoc($payment_dist)) {
+    $payment_counts[$row['dibayar']] = $row['count'];
+}
+
+// Updated outlet revenue query with correct calculation
+$outlet_revenue = mysqli_query($conn, "
+    SELECT o.nama, COUNT(*) as transactions, 
+    SUM(
+        (p.harga * dt.qty) * (1 - COALESCE(t.diskon, 0)/100) * (1 + COALESCE(t.pajak, 0)/100)
+    ) as revenue
+    FROM transaksi t 
+    JOIN outlet o ON t.id_outlet = o.id_outlet
+    JOIN paket p ON t.id_paket = p.id_paket
+    JOIN detail_transaksi dt ON t.id_transaksi = dt.id_transaksi
+    WHERE t.dibayar = 'dibayar'
+    GROUP BY o.id_outlet
+");
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -142,44 +191,6 @@
     </style>
 </head>
 <body>
-    <?php
-    include "koneksi.php";
-    
-    // Calculate summary statistics
-    $result = mysqli_query($conn, "SELECT SUM(p.harga) as total_revenue 
-                                 FROM transaksi t 
-                                 JOIN paket p ON t.id_paket = p.id_paket 
-                                 WHERE t.dibayar = 'dibayar'");
-    $total_revenue = mysqli_fetch_assoc($result)['total_revenue'] ?? 0;
-
-    $result = mysqli_query($conn, "SELECT COUNT(*) as total FROM transaksi");
-    $total_transactions = mysqli_fetch_assoc($result)['total'];
-
-    $status_dist = mysqli_query($conn, "SELECT status, COUNT(*) as count 
-                                      FROM transaksi 
-                                      GROUP BY status");
-    $status_counts = [];
-    while($row = mysqli_fetch_assoc($status_dist)) {
-        $status_counts[$row['status']] = $row['count'];
-    }
-
-    $payment_dist = mysqli_query($conn, "SELECT dibayar, COUNT(*) as count 
-                                       FROM transaksi 
-                                       GROUP BY dibayar");
-    $payment_counts = [];
-    while($row = mysqli_fetch_assoc($payment_dist)) {
-        $payment_counts[$row['dibayar']] = $row['count'];
-    }
-
-    $outlet_revenue = mysqli_query($conn, "SELECT o.nama, COUNT(*) as transactions, 
-                                         SUM(p.harga) as revenue
-                                         FROM transaksi t 
-                                         JOIN outlet o ON t.id_outlet = o.id_outlet
-                                         JOIN paket p ON t.id_paket = p.id_paket
-                                         WHERE t.dibayar = 'dibayar'
-                                         GROUP BY o.id_outlet");
-    ?>
-
     <!-- Page 1: Header and Summary Statistics -->
     <div class="page">
         <div class="container">
@@ -275,24 +286,30 @@
                 <thead>
                     <tr>
                         <th style="width: 5%">No</th>
-                        <th style="width: 12%">Outlet</th>
-                        <th style="width: 10%">Tanggal</th>
-                        <th style="width: 10%">Batas Waktu</th>
-                        <th style="width: 10%">Pembayaran</th>
-                        <th style="width: 10%">Tanggal Bayar</th>
-                        <th style="width: 15%">Customer</th>
-                        <th style="width: 18%">Paket</th>
-                        <th style="width: 10%">Status</th>
+                        <th style="width: 10%">Outlet</th>
+                        <th style="width: 8%">Tanggal</th>
+                        <th style="width: 8%">Batas Waktu</th>
+                        <th style="width: 8%">Pembayaran</th>
+                        <th style="width: 8%">Tanggal Bayar</th>
+                        <th style="width: 13%">Customer</th>
+                        <th style="width: 15%">Paket</th>
+                        <th style="width: 5%">Qty</th>
+                        <th style="width: 8%">Status</th>
+                        <th style="width: 12%">Total</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php
-                    $qry_transaksi = mysqli_query($conn, "SELECT t.*, o.nama as nama_outlet, m.nama_member, p.nama_paket 
-                                                        FROM transaksi t 
-                                                        JOIN outlet o ON o.id_outlet = t.id_outlet 
-                                                        JOIN member m ON m.id_member = t.id_member 
-                                                        JOIN paket p ON p.id_paket = t.id_paket 
-                                                        ORDER BY t.tgl DESC");
+                    $qry_transaksi = mysqli_query($conn, "
+                        SELECT t.*, o.nama as nama_outlet, m.nama_member, p.nama_paket, p.harga, dt.qty,
+                        (p.harga * dt.qty) * (1 - COALESCE(t.diskon, 0)/100) * (1 + COALESCE(t.pajak, 0)/100) as total
+                        FROM transaksi t 
+                        JOIN outlet o ON o.id_outlet = t.id_outlet 
+                        JOIN member m ON m.id_member = t.id_member 
+                        JOIN paket p ON p.id_paket = t.id_paket 
+                        JOIN detail_transaksi dt ON t.id_transaksi = dt.id_transaksi
+                        ORDER BY t.tgl DESC
+                    ");
                     $no = 0;
                     while($data_transaksi = mysqli_fetch_array($qry_transaksi)){
                         $no++;
@@ -306,7 +323,9 @@
                         <td><?=$data_transaksi['tgl_bayar'] ? date('d/m/Y', strtotime($data_transaksi['tgl_bayar'])) : '-'?></td>
                         <td><?=$data_transaksi['nama_member']?></td>
                         <td><?=$data_transaksi['nama_paket']?></td>
+                        <td><?=$data_transaksi['qty']?></td>
                         <td><?=$data_transaksi['status']?></td>
+                        <td>Rp <?=number_format($data_transaksi['total'], 0, ',', '.')?></td>
                     </tr>
                     <?php } ?>
                 </tbody>
