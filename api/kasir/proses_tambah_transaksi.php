@@ -30,12 +30,16 @@ if($_POST){
     } elseif(empty($id_paket)){
         echo "<script>alert('Id paket tidak boleh kosong');location.href='transaksi.php';</script>";
     } else {
+        // Get discount and tax values
+        $diskon = isset($_POST['diskon']) ? floatval($_POST['diskon']) : 0;
+        $pajak = isset($_POST['pajak']) ? floatval($_POST['pajak']) : 0;
+
         // Insert into transaksi table
-        $insert = mysqli_query($conn, 
-            "INSERT INTO transaksi (id_outlet, id_member, tgl, batas_waktu, tgl_bayar, status, dibayar, id_user, id_paket) 
-             VALUES ('$id_outlet', '$id_member', '$tgl', '$batas_waktu', " . 
-             ($dibayar == 'dibayar' ? "'$tgl_bayar'" : "NULL") . 
-             ", '$status', '$dibayar', '$id_user', '$id_paket')"
+        $insert = mysqli_query($conn,
+            "INSERT INTO transaksi (id_outlet, id_member, tgl, batas_waktu, tgl_bayar, status, dibayar, id_user, id_paket, diskon, pajak)
+             VALUES ('$id_outlet', '$id_member', '$tgl', '$batas_waktu', " .
+             ($dibayar == 'dibayar' ? "'$tgl_bayar'" : "NULL") .
+             ", '$status', '$dibayar', '$id_user', '$id_paket', '$diskon', '$pajak')"
         );
         
         if($insert){
