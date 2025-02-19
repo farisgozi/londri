@@ -207,6 +207,7 @@ $outlet_revenue = mysqli_query($conn, "
         }
     </style>
 </head>
+
 <body>
     <!-- Page 1: Header and Summary Statistics -->
     <div class="page">
