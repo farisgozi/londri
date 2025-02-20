@@ -208,7 +208,7 @@
 
             // Validate Member Name
             var xhrName = new XMLHttpRequest();
-            xhrName.open('GET', '../get_existing_member_names.php', true);
+            xhrName.open('GET', 'admin/get_existing_member_names.php', true);
             xhrName.onload = function () {
                 if (xhrName.status >= 200 && xhrName.status < 300) {
                     var existingMemberNames = JSON.parse(xhrName.responseText);
