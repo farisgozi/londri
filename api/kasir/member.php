@@ -208,7 +208,7 @@
 
             // Validate Member Name
             var xhrName = new XMLHttpRequest();
-            xhrName.open('GET', 'admin/get_existing_member_names.php', true);
+            xhrName.open('GET', './admin/get_existing_member_names.php', true);
             xhrName.onload = function () {
                 if (xhrName.status >= 200 && xhrName.status < 300) {
                     var existingMemberNames = JSON.parse(xhrName.responseText);
@@ -219,7 +219,7 @@
                     } else {
                         // Validate Phone Number
                         var xhrPhone = new XMLHttpRequest();
-                        xhrPhone.open('GET', '../get_existing_phone_numbers.php', true);
+                        xhrPhone.open('GET', './admin/get_existing_phone_numbers.php', true);
                         xhrPhone.onload = function () {
                             if (xhrPhone.status >= 200 && xhrPhone.status < 300) {
                                 var existingPhoneNumbers = JSON.parse(xhrPhone.responseText);
