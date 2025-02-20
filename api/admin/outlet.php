@@ -175,7 +175,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="proses_tambah_outlet.php" method="POST">
+                    <form action="proses_tambah_outlet.php" method="POST" onsubmit="return validateOutletForm(this);">
                         <div class="mb-3">
                             <label class="form-label">Nama Outlet</label>
                             <input type="text" name="nama" class="form-control" required>
@@ -199,5 +199,59 @@
     </div>
 
     <script src="../js/bootstrap.bundle.min.js"></script>
+    <script>
+        function validateOutletForm(form) {
+            var outletName = form.nama.value;
+            var phoneNumber = form.tlp.value;
+
+            // Validate Outlet Name
+            var xhrName = new XMLHttpRequest();
+            xhrName.open('GET', 'get_existing_outlet_names.php', true);
+            xhrName.onload = function () {
+                if (xhrName.status >= 200 && xhrName.status < 300) {
+                    var existingOutletNames = JSON.parse(xhrName.responseText);
+                    if (existingOutletNames.includes(outletName)) {
+                        alert('Nama outlet sudah terdaftar.');
+                        form.nama.focus();
+                        return false; // Prevent form submission
+                    } else {
+                        // Validate Phone Number
+                        var xhrPhone = new XMLHttpRequest();
+                        xhrPhone.open('GET', 'get_existing_outlet_phone_numbers.php', true);
+                        xhrPhone.onload = function () {
+                            if (xhrPhone.status >= 200 && xhrPhone.status < 300) {
+                                var existingPhoneNumbers = JSON.parse(xhrPhone.responseText);
+                                if (existingPhoneNumbers.includes(phoneNumber)) {
+                                    alert('Nomor telepon sudah terdaftar.');
+                                    form.tlp.focus();
+                                    return false; // Prevent form submission
+                                } else {
+                                    form.submit(); // Allow form submission
+                                }
+                            } else {
+                                alert('Gagal mengambil data nomor telepon.');
+                                return false;
+                            }
+                        };
+                        xhrPhone.onerror = function () {
+                            alert('Gagal mengambil data nomor telepon.');
+                            return false;
+                        };
+                        xhrPhone.send();
+                        return false; // Prevent default form submission while AJAX is in progress
+                    }
+                } else {
+                    alert('Gagal mengambil data nama outlet.');
+                    return false;
+                }
+            };
+            xhrName.onerror = function () {
+                alert('Gagal mengambil data nama outlet.');
+                return false;
+            };
+            xhrName.send();
+            return false; // Prevent default form submission while AJAX is in progress
+        }
+    </script>
 </body>
 </html>

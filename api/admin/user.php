@@ -200,7 +200,7 @@ include "koneksi.php";
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="proses_tambah_user.php" method="POST">
+                    <form action="proses_tambah_user.php" method="POST" onsubmit="return validateUserForm(this);">
                         <div class="mb-3">
                             <label class="form-label">Nama User</label>
                             <input type="text" name="nama_user" class="form-control" required>
@@ -245,5 +245,35 @@ include "koneksi.php";
     </div>
 
     <script src="../js/bootstrap.bundle.min.js"></script>
+    <script>
+        function validateUserForm(form) {
+            var username = form.username.value;
+
+            // Validate Username
+            var xhrUsername = new XMLHttpRequest();
+            xhrUsername.open('GET', 'get_existing_usernames.php', true);
+            xhrUsername.onload = function () {
+                if (xhrUsername.status >= 200 && xhrUsername.status < 300) {
+                    var existingUsernames = JSON.parse(xhrUsername.responseText);
+                    if (existingUsernames.includes(username)) {
+                        alert('Username sudah terdaftar.');
+                        form.username.focus();
+                        return false; // Prevent form submission
+                    } else {
+                        form.submit(); // Allow form submission
+                    }
+                } else {
+                    alert('Gagal mengambil data username.');
+                    return false;
+                }
+            };
+            xhrUsername.onerror = function () {
+                alert('Gagal mengambil data username.');
+                return false;
+            };
+            xhrUsername.send();
+            return false; // Prevent default form submission while AJAX is in progress
+        }
+    </script>
 </body>
 </html>

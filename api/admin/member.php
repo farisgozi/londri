@@ -184,7 +184,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="proses_tambah_member.php" method="POST">
+                    <form action="proses_tambah_member.php" method="POST" onsubmit="return validatePhoneNumber(this);">
                         <div class="mb-3">
                             <label class="form-label">Nama Pelanggan</label>
                             <input type="text" name="nama_member" class="form-control" required>
@@ -216,5 +216,59 @@
     </div>
 
     <script src="../js/bootstrap.bundle.min.js"></script>
+    <script>
+        function validatePhoneNumber(form) {
+            var phoneNumber = form.tlp.value;
+            var memberName = form.nama_member.value;
+
+            // Validate Member Name
+            var xhrName = new XMLHttpRequest();
+            xhrName.open('GET', 'get_existing_member_names.php', true);
+            xhrName.onload = function () {
+                if (xhrName.status >= 200 && xhrName.status < 300) {
+                    var existingMemberNames = JSON.parse(xhrName.responseText);
+                    if (existingMemberNames.includes(memberName)) {
+                        alert('Nama member sudah terdaftar.');
+                        form.nama_member.focus();
+                        return false; // Prevent form submission
+                    } else {
+                        // Validate Phone Number
+                        var xhrPhone = new XMLHttpRequest();
+                        xhrPhone.open('GET', 'get_existing_phone_numbers.php', true);
+                        xhrPhone.onload = function () {
+                            if (xhrPhone.status >= 200 && xhrPhone.status < 300) {
+                                var existingPhoneNumbers = JSON.parse(xhrPhone.responseText);
+                                if (existingPhoneNumbers.includes(phoneNumber)) {
+                                    alert('Nomor telepon sudah terdaftar.');
+                                    form.tlp.focus();
+                                    return false; // Prevent form submission
+                                } else {
+                                    form.submit(); // Allow form submission
+                                }
+                            } else {
+                                alert('Gagal mengambil data nomor telepon.');
+                                return false;
+                            }
+                        };
+                        xhrPhone.onerror = function () {
+                            alert('Gagal mengambil data nomor telepon.');
+                            return false;
+                        };
+                        xhrPhone.send();
+                        return false; // Prevent default form submission while AJAX is in progress
+                    }
+                } else {
+                    alert('Gagal mengambil data nama member.');
+                    return false;
+                }
+            };
+            xhrName.onerror = function () {
+                alert('Gagal mengambil data nama member.');
+                return false;
+            };
+            xhrName.send();
+            return false; // Prevent default form submission while AJAX is in progress
+        }
+    </script>
 </body>
 </html>
