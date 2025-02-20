@@ -169,7 +169,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="proses_tambah_member.php" method="POST">
+                    <form action="proses_tambah_member.php" method="POST" onsubmit="return validatePhoneNumber(this)">
                         <div class="mb-3">
                             <label class="form-label">Nama Pelanggan</label>
                             <input type="text" name="nama_member" class="form-control" required>
