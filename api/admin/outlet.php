@@ -108,9 +108,13 @@
                                         <td><?php echo $data_outlet['tlp']; ?></td>
                                         <td>
                                             <div class="btn-group">
-                                                <button type="button" class="btn btn-sm btn-info" 
-                                                        data-bs-toggle="modal" 
-                                                        data-bs-target="#editOutletModal<?php echo $data_outlet['id_outlet']; ?>">
+                                                <button type="button" class="btn btn-sm btn-info editOutletBtn"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#editOutletModal"
+                                                        data-id="<?php echo $data_outlet['id_outlet']; ?>"
+                                                        data-nama="<?php echo $data_outlet['nama']; ?>"
+                                                        data-alamat="<?php echo $data_outlet['alamat']; ?>"
+                                                        data-tlp="<?php echo $data_outlet['tlp']; ?>">
                                                     <i class="fas fa-edit"></i>
                                                 </button>
                                                 <a href="hapus_outlet.php?id_outlet=<?php echo $data_outlet['id_outlet']; ?>" 
@@ -121,41 +125,6 @@
                                             </div>
                                         </td>
                                     </tr>
-
-                                    <!-- Edit Outlet Modal -->
-                                    <div class="modal fade" id="editOutletModal<?php echo $data_outlet['id_outlet']; ?>" tabindex="-1">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title">Edit Outlet</h5>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <form action="proses_ubah_outlet.php" method="POST">
-                                                        <input type="hidden" name="id_outlet" value="<?php echo $data_outlet['id_outlet']; ?>">
-                                                        <div class="mb-3">
-                                                            <label class="form-label">Nama Outlet</label>
-                                                            <input type="text" name="nama" class="form-control" 
-                                                                   value="<?php echo $data_outlet['nama']; ?>" required>
-                                                        </div>
-                                                        <div class="mb-3">
-                                                            <label class="form-label">Alamat</label>
-                                                            <textarea name="alamat" class="form-control" required><?php echo $data_outlet['alamat']; ?></textarea>
-                                                        </div>
-                                                        <div class="mb-3">
-                                                            <label class="form-label">Telepon</label>
-                                                            <input type="text" name="tlp" class="form-control" 
-                                                                   value="<?php echo $data_outlet['tlp']; ?>" required>
-                                                        </div>
-                                                        <div class="text-end">
-                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                                                            <button type="submit" class="btn btn-primary">Simpan</button>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
                                     <?php } ?>
                                 </tbody>
                             </table>
@@ -187,6 +156,39 @@
                         <div class="mb-3">
                             <label class="form-label">Telepon</label>
                             <input type="text" name="tlp" class="form-control" required>
+                        </div>
+                        <div class="text-end">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                            <button type="submit" class="btn btn-primary">Simpan</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Outlet Modal -->
+    <div class="modal fade" id="editOutletModal" tabindex="-1" aria-labelledby="editOutletModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editOutletModalLabel">Edit Data Outlet</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form class="editOutletForm" action="proses_ubah_outlet.php" method="POST">
+                        <input type="hidden" name="id_outlet" id="id_outlet_edit">
+                        <div class="mb-3">
+                            <label class="form-label">Nama Outlet</label>
+                            <input type="text" name="nama" id="nama_edit" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Alamat</label>
+                            <textarea name="alamat" id="alamat_edit" class="form-control" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Telepon</label>
+                            <input type="text" name="tlp" id="tlp_edit" class="form-control" required>
                         </div>
                         <div class="text-end">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
@@ -252,6 +254,46 @@
             xhrName.send();
             return false; // Prevent default form submission while AJAX is in progress
         }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Edit Outlet Functionality
+            const editOutletButtons = document.querySelectorAll('.editOutletBtn');
+            editOutletButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const id = this.dataset.id;
+                    const nama = this.dataset.nama;
+                    const alamat = this.dataset.alamat;
+                    const tlp = this.dataset.tlp;
+
+                    document.getElementById('id_outlet_edit').value = id;
+                    document.getElementById('nama_edit').value = nama;
+                    document.getElementById('alamat_edit').value = alamat;
+                    document.getElementById('tlp_edit').value = tlp;
+                });
+            });
+
+            // Edit Outlet Form Submission
+            const editOutletForm = document.querySelector('.editOutletForm');
+            editOutletForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                const formData = new FormData(this);
+
+                fetch('proses_ubah_outlet.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.text())
+                .then(data => {
+                    alert(data); // Show response from server
+                    window.location.reload(); // Reload the page to update the table
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Terjadi kesalahan saat mengubah data outlet.');
+                });
+            });
+        });
     </script>
 </body>
 </html>

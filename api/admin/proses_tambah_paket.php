@@ -33,11 +33,18 @@ if($_POST){
         exit;
     }
 
-    // Insert the package
-    $insert = mysqli_query($conn, "INSERT INTO paket (id_outlet, jenis, nama_paket, harga) 
-    VALUES ('$id_outlet', '$jenis', '$nama_paket', '$harga')") or
-    die(mysqli_error($conn));
-
+    
+        // Check if package already exists for the outlet
+        $check_package = mysqli_query($conn, "SELECT * FROM paket WHERE id_outlet = '$id_outlet' AND nama_paket = '$nama_paket'");
+        if(mysqli_num_rows($check_package) > 0) {
+            echo "<script>alert('Paket dengan nama yang sama sudah ada di outlet ini');location.href='paket.php';</script>";
+            exit;
+        }
+    
+        // Insert the package
+        $insert = mysqli_query($conn, "INSERT INTO paket (id_outlet, jenis, nama_paket, harga)
+        VALUES ('$id_outlet', '$jenis', '$nama_paket', '$harga')") or
+        die(mysqli_error($conn));
     if($insert){
         echo "<script>alert('Sukses menambahkan paket');location.href='paket.php';</script>";
     } else {

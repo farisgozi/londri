@@ -1,6 +1,4 @@
-<?php
-include "koneksi.php";
-?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -100,6 +98,7 @@ include "koneksi.php";
                                 </thead>
                                 <tbody>
                                     <?php
+                                    include "koneksi.php";
                                     $qry_paket = mysqli_query($conn, "SELECT p.*, o.nama as nama_outlet FROM paket p JOIN outlet o ON p.id_outlet = o.id_outlet ORDER BY p.nama_paket");
                                     $no = 1;
                                     while($data_paket = mysqli_fetch_array($qry_paket)){
@@ -112,9 +111,14 @@ include "koneksi.php";
                                         <td><?php echo $data_paket['nama_outlet']; ?></td>
                                         <td>
                                             <div class="btn-group">
-                                                <button type="button" class="btn btn-sm btn-info" 
-                                                        data-bs-toggle="modal" 
-                                                        data-bs-target="#editPaketModal<?php echo $data_paket['id_paket']; ?>">
+                                                <button type="button" class="btn btn-sm btn-info editPaketBtn"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#editPaketModal"
+                                                        data-id="<?php echo $data_paket['id_paket']; ?>"
+                                                        data-id_outlet="<?php echo $data_paket['id_outlet']; ?>"
+                                                        data-jenis="<?php echo $data_paket['jenis']; ?>"
+                                                        data-nama_paket="<?php echo $data_paket['nama_paket']; ?>"
+                                                        data-harga="<?php echo $data_paket['harga']; ?>">
                                                     <i class="fas fa-edit"></i>
                                                 </button>
                                                 <a href="hapus_paket.php?id_paket=<?php echo $data_paket['id_paket']; ?>" 
@@ -125,59 +129,6 @@ include "koneksi.php";
                                             </div>
                                         </td>
                                     </tr>
-
-                                    <!-- Edit Paket Modal -->
-                                    <div class="modal fade" id="editPaketModal<?php echo $data_paket['id_paket']; ?>" tabindex="-1">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title">Edit Paket Laundry</h5>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <form action="proses_ubah_paket.php" method="POST">
-                                                        <input type="hidden" name="id_paket" value="<?php echo $data_paket['id_paket']; ?>">
-                                                        <div class="mb-3">
-                                                            <label class="form-label">Outlet</label>
-                                                            <select name="id_outlet" class="form-select" required>
-                                                                <?php
-                                                                $qry_outlet = mysqli_query($conn, "SELECT * FROM outlet ORDER BY nama");
-                                                                while($outlet = mysqli_fetch_array($qry_outlet)){
-                                                                    $selected = ($outlet['id_outlet'] == $data_paket['id_outlet']) ? 'selected' : '';
-                                                                    echo "<option value='".$outlet['id_outlet']."' ".$selected.">".$outlet['nama']."</option>";
-                                                                }
-                                                                ?>
-                                                            </select>
-                                                        </div>
-                                                        <div class="mb-3">
-                                                            <label class="form-label">Nama Paket</label>
-                                                            <input type="text" name="nama_paket" class="form-control" 
-                                                                   value="<?php echo $data_paket['nama_paket']; ?>" required>
-                                                        </div>
-                                                        <div class="mb-3">
-                                                            <label class="form-label">Jenis</label>
-                                                            <select name="jenis" class="form-select" required>
-                                                                <option value="kiloan" <?php if($data_paket['jenis']=='kiloan') echo 'selected'; ?>>Kiloan</option>
-                                                                <option value="selimut" <?php if($data_paket['jenis']=='selimut') echo 'selected'; ?>>Selimut</option>
-                                                                <option value="bed_cover" <?php if($data_paket['jenis']=='bed_cover') echo 'selected'; ?>>Bed Cover</option>
-                                                                <option value="kaos" <?php if($data_paket['jenis']=='kaos') echo 'selected'; ?>>Kaos</option>
-                                                                <option value="lain" <?php if($data_paket['jenis']=='lain') echo 'selected'; ?>>Lainnya</option>
-                                                            </select>
-                                                        </div>
-                                                        <div class="mb-3">
-                                                            <label class="form-label">Harga</label>
-                                                            <input type="number" name="harga" class="form-control" 
-                                                                   value="<?php echo $data_paket['harga']; ?>" required>
-                                                        </div>
-                                                        <div class="text-end">
-                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                                                            <button type="submit" class="btn btn-primary">Simpan</button>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
                                     <?php } ?>
                                 </tbody>
                             </table>
@@ -239,6 +190,99 @@ include "koneksi.php";
         </div>
     </div>
 
+    <!-- Edit Paket Modal -->
+    <div class="modal fade" id="editPaketModal" tabindex="-1" aria-labelledby="editPaketModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editPaketModalLabel">Edit Data Paket Laundry</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form class="editPaketForm" action="proses_ubah_paket.php" method="POST">
+                        <input type="hidden" name="id_paket" id="id_paket_edit">
+                        <div class="mb-3">
+                            <label class="form-label">Outlet</label>
+                            <select name="id_outlet" id="id_outlet_edit" class="form-select" required>
+                                <?php
+                                $qry_outlet = mysqli_query($conn, "SELECT * FROM outlet ORDER BY nama");
+                                while($outlet = mysqli_fetch_array($qry_outlet)){
+                                    echo "<option value='".$outlet['id_outlet']."'>".$outlet['nama']."</option>";
+                                }
+                                ?>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Nama Paket</label>
+                            <input type="text" name="nama_paket" id="nama_paket_edit" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Jenis</label>
+                            <select name="jenis" id="jenis_edit" class="form-select" required>
+                                <option value="kiloan">Kiloan</option>
+                                <option value="selimut">Selimut</option>
+                                <option value="bed_cover">Bed Cover</option>
+                                <option value="kaos">Kaos</option>
+                                <option value="lain">Lainnya</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Harga</label>
+                            <input type="number" name="harga" id="harga_edit" class="form-control" required>
+                        </div>
+                        <div class="text-end">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                            <button type="submit" class="btn btn-primary">Simpan</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="../js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Edit Paket Functionality
+            const editPaketButtons = document.querySelectorAll('.editPaketBtn');
+            editPaketButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const id = this.dataset.id;
+                    const id_outlet = this.dataset.id_outlet;
+                    const jenis = this.dataset.jenis;
+                    const nama_paket = this.dataset.nama_paket;
+                    const harga = this.dataset.harga;
+
+                    document.getElementById('id_paket_edit').value = id;
+                    document.getElementById('id_outlet_edit').value = id_outlet;
+                    document.getElementById('jenis_edit').value = jenis;
+                    document.getElementById('nama_paket_edit').value = nama_paket;
+                    document.getElementById('harga_edit').value = harga;
+                });
+            });
+
+            // Edit Paket Form Submission
+            const editPaketForm = document.querySelector('.editPaketForm');
+            editPaketForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                const formData = new FormData(this);
+
+                fetch('proses_ubah_paket.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.text())
+                .then(data => {
+                    alert(data); // Show response from server
+                    window.location.reload(); // Reload the page to update the table
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Terjadi kesalahan saat mengubah data paket.');
+                });
+            });
+        });
+    </script>
 </body>
 </html>

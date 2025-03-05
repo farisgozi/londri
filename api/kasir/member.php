@@ -25,7 +25,7 @@
                     </div>
                     <ul class="nav flex-column">
                         <li class="nav-item mb-2">
-                            <a href="index_kasir.php" class="nav-link text-white">
+                            <a href="./index_admin.php" class="nav-link text-white">
                                 <i class="fas fa-home me-2"></i> Dashboard
                             </a>
                         </li>
@@ -95,9 +95,14 @@
                                         <td><?php echo $data_member['tlp']; ?></td>
                                         <td>
                                             <div class="btn-group">
-                                                <button type="button" class="btn btn-sm btn-info" 
-                                                        data-bs-toggle="modal" 
-                                                        data-bs-target="#editMemberModal<?php echo $data_member['id_member']; ?>">
+                                                <button type="button" class="btn btn-sm btn-info editMemberBtn"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#editMemberModal"
+                                                        data-id="<?php echo $data_member['id_member']; ?>"
+                                                        data-nama="<?php echo $data_member['nama_member']; ?>"
+                                                        data-alamat="<?php echo $data_member['alamat']; ?>"
+                                                        data-jenis_kelamin="<?php echo $data_member['jenis_kelamin']; ?>"
+                                                        data-tlp="<?php echo $data_member['tlp']; ?>">
                                                     <i class="fas fa-edit"></i>
                                                 </button>
                                                 <a href="hapus_member.php?id_member=<?php echo $data_member['id_member']; ?>" 
@@ -110,46 +115,7 @@
                                     </tr>
 
                                     <!-- Edit Member Modal -->
-                                    <div class="modal fade" id="editMemberModal<?php echo $data_member['id_member']; ?>" tabindex="-1">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title">Edit Data Pelanggan</h5>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <form action="proses_ubah_member.php" method="POST">
-                                                        <input type="hidden" name="id_member" value="<?php echo $data_member['id_member']; ?>">
-                                                        <div class="mb-3">
-                                                            <label class="form-label">Nama Pelanggan</label>
-                                                            <input type="text" name="nama_member" class="form-control" 
-                                                                   value="<?php echo $data_member['nama_member']; ?>" required>
-                                                        </div>
-                                                        <div class="mb-3">
-                                                            <label class="form-label">Alamat</label>
-                                                            <textarea name="alamat" class="form-control" required><?php echo $data_member['alamat']; ?></textarea>
-                                                        </div>
-                                                        <div class="mb-3">
-                                                            <label class="form-label">Jenis Kelamin</label>
-                                                            <select name="jenis_kelamin" class="form-select" required>
-                                                                <option value="Laki-laki" <?php if($data_member['jenis_kelamin']=='Laki-laki') echo 'selected'; ?>>Laki-laki</option>
-                                                                <option value="Perempuan" <?php if($data_member['jenis_kelamin']=='Perempuan') echo 'selected'; ?>>Perempuan</option>
-                                                            </select>
-                                                        </div>
-                                                        <div class="mb-3">
-                                                            <label class="form-label">Telepon</label>
-                                                            <input type="text" name="tlp" class="form-control" 
-                                                                   value="<?php echo $data_member['tlp']; ?>" required>
-                                                        </div>
-                                                        <div class="text-end">
-                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                                                            <button type="submit" class="btn btn-primary">Simpan</button>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    
                                     <?php } ?>
                                 </tbody>
                             </table>
@@ -161,34 +127,34 @@
     </div>
 
     <!-- Add Member Modal -->
-    <div class="modal fade" id="addMemberModal" tabindex="-1">
+    <div class="modal" id="addMemberModal" tabindex="-1" aria-labelledby="addMemberModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Tambah Pelanggan Baru</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    <h5 class="modal-title" id="addMemberModalLabel">Tambah Pelanggan Baru</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="proses_tambah_member.php" method="POST" onsubmit="return validatePhoneNumber(this)">
+                    <form action="proses_tambah_member.php" method="POST" id="addMemberForm">
                         <div class="mb-3">
-                            <label class="form-label">Nama Pelanggan</label>
-                            <input type="text" name="nama_member" class="form-control" required>
+                            <label for="nama_member_new" class="form-label">Nama Pelanggan</label>
+                            <input type="text" name="nama_member" id="nama_member_new" class="form-control" required>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Alamat</label>
-                            <textarea name="alamat" class="form-control" required></textarea>
+                            <label for="alamat_new" class="form-label">Alamat</label>
+                            <textarea name="alamat" id="alamat_new" class="form-control" required></textarea>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Jenis Kelamin</label>
-                            <select name="jenis_kelamin" class="form-select" required>
+                            <label for="jenis_kelamin_new" class="form-label">Jenis Kelamin</label>
+                            <select name="jenis_kelamin" id="jenis_kelamin_new" class="form-select" required>
                                 <option value="">Pilih Jenis Kelamin</option>
                                 <option value="Laki-laki">Laki-laki</option>
                                 <option value="Perempuan">Perempuan</option>
                             </select>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Telepon</label>
-                            <input type="text" name="tlp" class="form-control" required>
+                            <label for="tlp_new" class="form-label">Telepon</label>
+                            <input type="text" name="tlp" id="tlp_new" class="form-control" required>
                         </div>
                         <div class="text-end">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
@@ -200,59 +166,149 @@
         </div>
     </div>
 
+        <!-- Edit Member Modal -->
+        <div class="modal" id="editMemberModal" tabindex="-1" aria-labelledby="editMemberModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editMemberModalLabel">Edit Data Pelanggan</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form class="editMemberForm" action="proses_ubah_member.php" method="POST">
+                            <input type="hidden" name="id_member" id="id_member_edit">
+                            <div class="mb-3">
+                                <label for="nama_member_edit" class="form-label">Nama Pelanggan</label>
+                                <input type="text" name="nama_member" id="nama_member_edit" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="alamat_edit" class="form-label">Alamat</label>
+                                <textarea name="alamat" id="alamat_edit" class="form-control" required></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="jenis_kelamin_edit" class="form-label">Jenis Kelamin</label>
+                                <select name="jenis_kelamin" id="jenis_kelamin_edit" class="form-select" required>
+                                    <option value="">Pilih Jenis Kelamin</option>
+                                    <option value="Laki-laki">Laki-laki</option>
+                                    <option value="Perempuan">Perempuan</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="tlp_edit" class="form-label">Telepon</label>
+                                <input type="text" name="tlp" id="tlp_edit" class="form-control" required>
+                            </div>
+                            <div class="text-end">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                                <button type="submit" class="btn btn-primary">Simpan</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     <script src="../js/bootstrap.bundle.min.js"></script>
     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Fix for modal issues
+            var addMemberForm = document.getElementById('addMemberForm');
+            if (addMemberForm) {
+                addMemberForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    validatePhoneNumber(this);
+                });
+            }
+
+            // Ensure proper modal behavior
+            var modals = document.querySelectorAll('.modal');
+            modals.forEach(function(modal) {
+                modal._modalBackdrop = null;
+            });
+
+            // Edit Member Functionality
+            const editMemberButtons = document.querySelectorAll('.editMemberBtn');
+            editMemberButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const id = this.dataset.id;
+                    const nama = this.dataset.nama;
+                    const alamat = this.dataset.alamat;
+                    const jenis_kelamin = this.dataset.jenis_kelamin;
+                    const tlp = this.dataset.tlp;
+
+                    document.getElementById('id_member_edit').value = id;
+                    document.getElementById('nama_member_edit').value = nama;
+                    document.getElementById('alamat_edit').value = alamat;
+                    document.getElementById('jenis_kelamin_edit').value = jenis_kelamin;
+                    document.getElementById('tlp_edit').value = tlp;
+                });
+            });
+
+            // Edit Member Form Submission
+            const editMemberForm = document.querySelector('.editMemberForm');
+            editMemberForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                const formData = new FormData(this);
+
+                fetch('proses_ubah_member.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.text())
+                .then(data => {
+                    alert(data); // Show response from server
+                    window.location.reload(); // Reload the page to update the table
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Terjadi kesalahan saat mengubah data member.');
+                });
+            });
+        });
+
         function validatePhoneNumber(form) {
             var phoneNumber = form.tlp.value;
             var memberName = form.nama_member.value;
 
             // Validate Member Name
             var xhrName = new XMLHttpRequest();
-            xhrName.open('GET', '../admin/get_existing_member_names.php', true);
+            xhrName.open('GET', 'get_existing_member_names.php', true);
             xhrName.onload = function () {
                 if (xhrName.status >= 200 && xhrName.status < 300) {
                     var existingMemberNames = JSON.parse(xhrName.responseText);
                     if (existingMemberNames.includes(memberName)) {
                         alert('Nama member sudah terdaftar.');
                         form.nama_member.focus();
-                        return false; // Prevent form submission
                     } else {
                         // Validate Phone Number
                         var xhrPhone = new XMLHttpRequest();
-                        xhrPhone.open('GET', '../admin/get_existing_phone_numbers.php', true);
+                        xhrPhone.open('GET', 'get_existing_phone_numbers.php', true);
                         xhrPhone.onload = function () {
                             if (xhrPhone.status >= 200 && xhrPhone.status < 300) {
                                 var existingPhoneNumbers = JSON.parse(xhrPhone.responseText);
                                 if (existingPhoneNumbers.includes(phoneNumber)) {
                                     alert('Nomor telepon sudah terdaftar.');
                                     form.tlp.focus();
-                                    return false; // Prevent form submission
                                 } else {
                                     form.submit(); // Allow form submission
                                 }
                             } else {
                                 alert('Gagal mengambil data nomor telepon.');
-                                return false;
                             }
                         };
                         xhrPhone.onerror = function () {
                             alert('Gagal mengambil data nomor telepon.');
-                            return false;
                         };
                         xhrPhone.send();
-                        return false; // Prevent default form submission while AJAX is in progress
                     }
                 } else {
                     alert('Gagal mengambil data nama member.');
-                    return false;
                 }
             };
             xhrName.onerror = function () {
                 alert('Gagal mengambil data nama member.');
-                return false;
             };
             xhrName.send();
-            return false; // Prevent default form submission while AJAX is in progress
         }
     </script>
 </body>

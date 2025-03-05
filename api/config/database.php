@@ -1,7 +1,7 @@
 <?php
 $host = 'localhost';
-$user = 'gozi';
-$pass = '1503';
+$user = 'root';
+$pass = '';
 $db   = 'aplikasilaundry';
 $port = '3306';
 

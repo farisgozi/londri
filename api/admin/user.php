@@ -1,6 +1,3 @@
-<?php
-include "koneksi.php";
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -100,6 +97,7 @@ include "koneksi.php";
                                 </thead>
                                 <tbody>
                                     <?php
+                                    include "koneksi.php";
                                     $qry_user = mysqli_query($conn, "SELECT u.*, o.nama as nama_outlet FROM user u JOIN outlet o ON u.id_outlet = o.id_outlet ORDER BY u.nama_user");
                                     $no = 1;
                                     while($data_user = mysqli_fetch_array($qry_user)){
@@ -112,9 +110,14 @@ include "koneksi.php";
                                         <td><?php echo $data_user['nama_outlet']; ?></td>
                                         <td>
                                             <div class="btn-group">
-                                                <button type="button" class="btn btn-sm btn-info" 
-                                                        data-bs-toggle="modal" 
-                                                        data-bs-target="#editUserModal<?php echo $data_user['id_user']; ?>">
+                                                <button type="button" class="btn btn-sm btn-info editUserBtn"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#editUserModal"
+                                                        data-id="<?php echo $data_user['id_user']; ?>"
+                                                        data-nama_user="<?php echo $data_user['nama_user']; ?>"
+                                                        data-username="<?php echo $data_user['username']; ?>"
+                                                        data-id_outlet="<?php echo $data_user['id_outlet']; ?>"
+                                                        data-role="<?php echo $data_user['role']; ?>">
                                                     <i class="fas fa-edit"></i>
                                                 </button>
                                                 <a href="hapus_user.php?id_user=<?php echo $data_user['id_user']; ?>" 
@@ -125,62 +128,6 @@ include "koneksi.php";
                                             </div>
                                         </td>
                                     </tr>
-
-                                    <!-- Edit User Modal -->
-                                    <div class="modal fade" id="editUserModal<?php echo $data_user['id_user']; ?>" tabindex="-1">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title">Edit User</h5>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <form action="proses_ubah_user.php" method="POST">
-                                                        <input type="hidden" name="id_user" value="<?php echo $data_user['id_user']; ?>">
-                                                        <div class="mb-3">
-                                                            <label class="form-label">Nama User</label>
-                                                            <input type="text" name="nama_user" class="form-control" 
-                                                                   value="<?php echo $data_user['nama_user']; ?>" required>
-                                                        </div>
-                                                        <div class="mb-3">
-                                                            <label class="form-label">Username</label>
-                                                            <input type="text" name="username" class="form-control" 
-                                                                   value="<?php echo $data_user['username']; ?>" required>
-                                                        </div>
-                                                        <div class="mb-3">
-                                                            <label class="form-label">Password Baru</label>
-                                                            <input type="password" name="password" class="form-control">
-                                                            <small class="text-muted">Kosongkan jika tidak ingin mengubah password</small>
-                                                        </div>
-                                                        <div class="mb-3">
-                                                            <label class="form-label">Outlet</label>
-                                                            <select name="id_outlet" class="form-select" required>
-                                                                <?php
-                                                                $qry_outlet = mysqli_query($conn, "SELECT * FROM outlet ORDER BY nama");
-                                                                while($outlet = mysqli_fetch_array($qry_outlet)){
-                                                                    $selected = ($outlet['id_outlet'] == $data_user['id_outlet']) ? 'selected' : '';
-                                                                    echo "<option value='".$outlet['id_outlet']."' ".$selected.">".$outlet['nama']."</option>";
-                                                                }
-                                                                ?>
-                                                            </select>
-                                                        </div>
-                                                        <div class="mb-3">
-                                                            <label class="form-label">Role</label>
-                                                            <select name="role" class="form-select" required>
-                                                                <option value="admin" <?php if($data_user['role']=='admin') echo 'selected'; ?>>Admin</option>
-                                                                <option value="kasir" <?php if($data_user['role']=='kasir') echo 'selected'; ?>>Kasir</option>
-                                                                <option value="owner" <?php if($data_user['role']=='owner') echo 'selected'; ?>>Owner</option>
-                                                            </select>
-                                                        </div>
-                                                        <div class="text-end">
-                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                                                            <button type="submit" class="btn btn-primary">Simpan</button>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
                                     <?php } ?>
                                 </tbody>
                             </table>
@@ -244,6 +191,59 @@ include "koneksi.php";
         </div>
     </div>
 
+    <!-- Edit User Modal -->
+    <div class="modal fade" id="editUserModal" tabindex="-1" aria-labelledby="editUserModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editUserModalLabel">Edit Data User</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form class="editUserForm" action="proses_ubah_user.php" method="POST">
+                        <input type="hidden" name="id_user" id="id_user_edit">
+                        <div class="mb-3">
+                            <label class="form-label">Nama User</label>
+                            <input type="text" name="nama_user" id="nama_user_edit" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Username</label>
+                            <input type="text" name="username" id="username_edit" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Password Baru</label>
+                            <input type="password" name="password" id="password_edit" class="form-control">
+                            <small class="text-muted">Kosongkan jika tidak ingin mengubah password</small>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Outlet</label>
+                            <select name="id_outlet" id="id_outlet_edit" class="form-select" required>
+                                <?php
+                                $qry_outlet = mysqli_query($conn, "SELECT * FROM outlet ORDER BY nama");
+                                while($outlet = mysqli_fetch_array($qry_outlet)){
+                                    echo "<option value='".$outlet['id_outlet']."'>".$outlet['nama']."</option>";
+                                }
+                                ?>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Role</label>
+                            <select name="role" id="role_edit" class="form-select" required>
+                                <option value="admin">Admin</option>
+                                <option value="kasir">Kasir</option>
+                                <option value="owner">Owner</option>
+                            </select>
+                        </div>
+                        <div class="text-end">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                            <button type="submit" class="btn btn-primary">Simpan</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="../js/bootstrap.bundle.min.js"></script>
     <script>
         function validateUserForm(form) {
@@ -274,6 +274,48 @@ include "koneksi.php";
             xhrUsername.send();
             return false; // Prevent default form submission while AJAX is in progress
         }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Edit User Functionality
+            const editUserButtons = document.querySelectorAll('.editUserBtn');
+            editUserButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const id = this.dataset.id;
+                    const nama_user = this.dataset.nama_user;
+                    const username = this.dataset.username;
+                    const id_outlet = this.dataset.id_outlet;
+                    const role = this.dataset.role;
+
+                    document.getElementById('id_user_edit').value = id;
+                    document.getElementById('nama_user_edit').value = nama_user;
+                    document.getElementById('username_edit').value = username;
+                    document.getElementById('id_outlet_edit').value = id_outlet;
+                    document.getElementById('role_edit').value = role;
+                });
+            });
+
+            // Edit User Form Submission
+            const editUserForm = document.querySelector('.editUserForm');
+            editUserForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                const formData = new FormData(this);
+
+                fetch('proses_ubah_user.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.text())
+                .then(data => {
+                    alert(data); // Show response from server
+                    window.location.reload(); // Reload the page to update the table
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Terjadi kesalahan saat mengubah data user.');
+                });
+            });
+        });
     </script>
 </body>
 </html>
